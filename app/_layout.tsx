@@ -22,7 +22,7 @@ export default function RootLayout() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <Stack>
-          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
       </QueryClientProvider>
     </trpc.Provider>
