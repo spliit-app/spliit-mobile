@@ -15,7 +15,7 @@ export default function GroupsScreen() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex-1 bg-white">
         <SectionList
           sections={sections}
           keyExtractor={(group) => group.id}
@@ -27,7 +27,7 @@ export default function GroupsScreen() {
               }}
               asChild
             >
-              <Pressable className="mx-4 my-2 p-4 bg-white border rounded-md border-gray-200">
+              <Pressable className="mx-4 my-2 p-4 bg-slate-100 rounded-md">
                 <Text>{group.name}</Text>
               </Pressable>
             </Link>
