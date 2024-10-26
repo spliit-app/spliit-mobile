@@ -17,13 +17,22 @@ export default function GroupScreen() {
   return <ExpenseList group={data.group} />
 }
 
+const PAGE_SIZE = 20
+
 function ExpenseList({
   group,
 }: {
   group: NonNullable<AppRouterOutput['groups']['get']['group']>
 }) {
-  const { data } = trpc.groups.expenses.list.useQuery({ groupId: group.id })
-  const groups = getGroupedExpensesByDate(data?.expenses ?? [])
+  const { data, fetchNextPage } = trpc.groups.expenses.list.useInfiniteQuery(
+    { groupId: group.id, limit: PAGE_SIZE },
+    { getNextPageParam: ({ nextCursor }) => nextCursor }
+  )
+
+  const expenses = data?.pages.flatMap((page) => page.expenses)
+  const hasMore = data?.pages.at(-1)?.hasMore ?? false
+
+  const groups = getGroupedExpensesByDate(expenses ?? [])
   const sections = Object.entries(groups).map(([id, expenses]) => ({
     title: match(id)
       .with('upcoming', () => 'Upcoming')
@@ -36,6 +45,7 @@ function ExpenseList({
       .otherwise(() => id),
     data: expenses,
   }))
+
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-white">
@@ -74,6 +84,9 @@ function ExpenseList({
               <Text className="font-bold">{title}</Text>
             </View>
           )}
+          onEndReached={() => {
+            if (hasMore) fetchNextPage()
+          }}
         />
       </SafeAreaView>
     </SafeAreaProvider>
