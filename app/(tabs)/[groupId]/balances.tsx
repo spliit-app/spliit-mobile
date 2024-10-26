@@ -24,7 +24,7 @@ function Balances({
   if (!data?.balances) return null
 
   const maxBalance = Math.max(
-    ...Object.values(data.balances).map(({ paid }) => Math.abs(paid))
+    ...Object.values(data.balances).map(({ total }) => Math.abs(total))
   )
 
   return (
