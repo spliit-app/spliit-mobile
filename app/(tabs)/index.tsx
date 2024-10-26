@@ -33,7 +33,7 @@ export default function GroupsScreen() {
 
   const sections = [
     {
-      title: '',
+      title: 'Groups',
       data: recentGroups
         .map((recentGroup) =>
           data.groups.find((group) => group.id === recentGroup.groupId)
