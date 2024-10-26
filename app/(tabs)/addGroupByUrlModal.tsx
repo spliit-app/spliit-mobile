@@ -2,7 +2,7 @@ import { addRecentGroup } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
 import { Stack, useRouter } from 'expo-router'
 import { useState } from 'react'
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Button, Pressable, Text, TextInput, View } from 'react-native'
 
 export default function AddGroupByUrlModal() {
   const [url, setUrl] = useState('')
@@ -13,7 +13,14 @@ export default function AddGroupByUrlModal() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Add group by URL' }} />
+      <Stack.Screen
+        options={{
+          title: 'Add group by URL',
+          headerRight: () => (
+            <Button title="Cancel" onPress={() => router.back()} />
+          ),
+        }}
+      />
       <View className="p-4 bg-white h-full">
         <Text className="mb-2">
           If a group was shared with you, you can paste its URL here to add it
@@ -37,31 +44,35 @@ export default function AddGroupByUrlModal() {
             The URL is not a valid group URL.
           </Text>
         )}
-        <Pressable
-          disabled={isPending}
-          onPress={async () => {
-            setIsPending(true)
-            const groupId = extractGroupId(url)
-            if (groupId) {
-              const data = await utils.groups.get.fetch({ groupId })
-              if (data.group) {
-                await addRecentGroup({
-                  groupId: data.group.id,
-                  groupName: data.group.name,
-                })
-                router.back()
+        <View className="flex-row justify-end gap-2">
+          <Pressable
+            disabled={isPending}
+            onPress={async () => {
+              setIsPending(true)
+              const groupId = extractGroupId(url)
+              if (groupId) {
+                const data = await utils.groups.get.fetch({ groupId })
+                if (data.group) {
+                  await addRecentGroup({
+                    groupId: data.group.id,
+                    groupName: data.group.name,
+                  })
+                  router.back()
+                } else {
+                  setHasError(true)
+                }
               } else {
                 setHasError(true)
               }
-            } else {
-              setHasError(true)
-            }
-            setIsPending(false)
-          }}
-          className="self-center px-4 py-2 rounded bg-emerald-700"
-        >
-          <Text className="text-white">{isPending ? 'Adding…' : 'Add'}</Text>
-        </Pressable>
+              setIsPending(false)
+            }}
+            className="px-4 py-2 rounded bg-emerald-700"
+          >
+            <Text className="text-white text-lg font-semibold">
+              {isPending ? 'Adding…' : 'Add'}
+            </Text>
+          </Pressable>
+        </View>
       </View>
     </>
   )

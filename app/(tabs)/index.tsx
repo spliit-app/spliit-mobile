@@ -1,7 +1,7 @@
 import { RecentGroup, getRecentGroups } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
-import { Link } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { Link, useNavigation, usePathname, useRouter } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
 import { Pressable, SectionList, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
@@ -12,18 +12,35 @@ export default function GroupsScreen() {
     groupIds: recentGroups.map(({ groupId }) => groupId),
   })
 
-  useEffect(() => {
+  const fetchGroups = useCallback(() => {
     getRecentGroups().then((recentGroups) => {
       setRecentGroups(recentGroups)
       refetch()
     })
   }, [refetch])
 
+  const navigation = useNavigation()
+  const pathname = usePathname()
+  useEffect(() => {
+    if (navigation.isFocused()) {
+      fetchGroups()
+    }
+  }, [pathname, navigation, fetchGroups])
+
   if (isLoading) return <Text>Loading...</Text>
 
   if (!data) return <Text>Error</Text>
 
-  const sections = [{ title: 'Groups', data: data.groups }]
+  const sections = [
+    {
+      title: '',
+      data: recentGroups
+        .map((recentGroup) =>
+          data.groups.find((group) => group.id === recentGroup.groupId)
+        )
+        .filter(Boolean),
+    },
+  ]
 
   return (
     <SafeAreaProvider>
