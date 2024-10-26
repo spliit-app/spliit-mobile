@@ -32,7 +32,7 @@ function ExpenseList({
           keyExtractor={(expense) => expense.id}
           renderItem={({ item: expense }) => (
             <Pressable className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between">
-              <View className="gap-1">
+              <View className="gap-1 flex-1">
                 <Text>{expense.title}</Text>
                 <Text className="text-xs text-slate-600">
                   Paid by{' '}
@@ -45,7 +45,7 @@ function ExpenseList({
                   ))}
                 </Text>
               </View>
-              <View className="gap-1 items-end">
+              <View className="gap-1 items-end flex-shrink-0 justify-between">
                 <Text className="font-bold">
                   {formatCurrency(group.currency, expense.amount / 100)}
                 </Text>
