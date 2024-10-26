@@ -33,11 +33,13 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: groupDetails,
     resolver: zodResolver(groupFormSchema),
   })
+  const { mutateAsync } = trpc.groups.update.useMutation()
+  const utils = trpc.useUtils()
 
   return (
     <>
@@ -140,9 +142,25 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
       </FormSection>
 
       <View className="flex-row justify-center mt-2 mb-6">
-        <Pressable onPress={handleSubmit((values) => console.log(values))}>
+        <Pressable
+          disabled={isSubmitting}
+          style={{ opacity: isSubmitting ? 0.5 : undefined }}
+          onPress={handleSubmit(async (values) => {
+            await mutateAsync({
+              groupId: groupDetails.id,
+              groupFormValues: {
+                ...values,
+                information: values.information ?? undefined,
+              },
+            })
+            await utils.groups.invalidate()
+            return console.log(values)
+          })}
+        >
           <View className="bg-emerald-600 rounded-lg px-4 py-2 ">
-            <Text className="text-white text-lg font-semibold">Save</Text>
+            <Text className="text-white text-lg font-semibold">
+              {isSubmitting ? 'Saving…' : 'Save'}
+            </Text>
           </View>
         </Pressable>
       </View>
