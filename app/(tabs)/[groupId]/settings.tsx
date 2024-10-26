@@ -56,6 +56,7 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
   return (
     <>
       <FormSectionTitle>Group information</FormSectionTitle>
+
       <FormSection>
         <FormGroup>
           <Label>Group name</Label>

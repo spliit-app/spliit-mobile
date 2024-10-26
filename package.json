@@ -23,6 +23,7 @@
     "@trpc/client": "^11.0.0-rc.593",
     "@trpc/react-query": "^11.0.0-rc.593",
     "@trpc/server": "^11.0.0-rc.593",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
@@ -45,6 +46,7 @@
     "react-native-web": "~0.19.10",
     "spliit-api": "github:spliit-app/spliit#api",
     "superjson": "^2.2.1",
+    "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.14",
     "ts-pattern": "^5.5.0",
     "zod": "^3.23.8"
