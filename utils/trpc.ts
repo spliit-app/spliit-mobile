@@ -5,3 +5,4 @@ export const trpc = createTRPCReact<AppRouter>()
 
 export type Expense =
   AppRouterOutput['groups']['expenses']['list']['expenses'][number]
+export type GroupDetails = AppRouterOutput['groups']['getDetails']['group']

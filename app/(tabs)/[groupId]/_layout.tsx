@@ -1,5 +1,5 @@
 import { trpc } from '@/utils/trpc'
-import { FontAwesome6 } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Stack, Tabs, useLocalSearchParams } from 'expo-router'
 
 export default function TabLayout() {
@@ -30,6 +30,16 @@ export default function TabLayout() {
                 size={28}
                 color={color}
               />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="settings"
+          options={{
+            title: 'Settings',
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome5 name="cog" size={28} color={color} />
             ),
           }}
         />
