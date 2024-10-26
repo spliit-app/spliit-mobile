@@ -23,8 +23,6 @@ function Balances({
 
   if (!data?.balances) return null
 
-  console.log(data.balances)
-
   const maxBalance = Math.max(
     ...Object.values(data.balances).map(({ paid }) => Math.abs(paid))
   )
@@ -39,11 +37,12 @@ function Balances({
               This is the amount that each participant paid or was paid for.
             </Text>
           </View>
-          {Object.entries(data.balances).map(([participantId, balance]) => {
-            const participant = group.participants.find(
-              (participant) => participant.id === participantId
-            )
-            if (!participant) return null
+          {group.participants.map((participant) => {
+            const balance = data.balances[participant.id] ?? {
+              total: 0,
+              paid: 0,
+              paidFor: 0,
+            }
 
             const participantNameElement = (
               <View
@@ -57,17 +56,21 @@ function Balances({
             )
             const barElement = (
               <View className="w-1/2 relative">
-                <View
-                  className={
-                    'h-full border ' +
-                    (balance.total < 0
-                      ? 'bg-red-300 border-red-400 self-end rounded-l-md'
-                      : 'bg-green-300 border-green-400 self-start rounded-r-md')
-                  }
-                  style={{
-                    width: `${Math.abs((balance.total / maxBalance) * 100)}%`,
-                  }}
-                ></View>
+                {balance.total !== 0 ? (
+                  <View
+                    className={
+                      'h-full border ' +
+                      (balance.total < 0
+                        ? 'bg-red-300 border-red-400 self-end rounded-l-md'
+                        : 'bg-green-300 border-green-400 self-start rounded-r-md')
+                    }
+                    style={{
+                      width: `${Math.abs((balance.total / maxBalance) * 100)}%`,
+                    }}
+                  />
+                ) : (
+                  <View className="h-full" />
+                )}
                 <View className="px-2 absolute top-0 bottom-0 left-0 right-0 flex-col justify-center">
                   <Text
                     className={balance.total < 0 ? 'self-end' : 'self-start'}
@@ -84,7 +87,7 @@ function Balances({
             return (
               <View
                 className="mx-4 mb-2 h-8 items-center flex-row"
-                key={participantId}
+                key={participant.id}
               >
                 {balance.total < 0 ? (
                   <>
@@ -110,6 +113,12 @@ function Balances({
               participants.
             </Text>
           </View>
+
+          {data.reimbursements.length === 0 && (
+            <Text className="mx-4 text-sm">
+              It looks like your group doesn’t need any reimbursement 😁
+            </Text>
+          )}
 
           {data.reimbursements.map((reimbursement, index) => {
             const participantFrom = group.participants.find(

@@ -8,6 +8,10 @@ export default function TabLayout() {
         options={{ title: 'Groups', headerShown: false }}
       />
       <Stack.Screen name="[groupId]" />
+      <Stack.Screen
+        name="addGroupByUrlModal"
+        options={{ presentation: 'modal' }}
+      />
     </Stack>
   )
 }

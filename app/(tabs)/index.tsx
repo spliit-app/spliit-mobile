@@ -1,12 +1,24 @@
+import { RecentGroup, getRecentGroups } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
 import { Link } from 'expo-router'
+import { useEffect, useState } from 'react'
 import { Pressable, SectionList, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
 export default function GroupsScreen() {
-  const { data, isLoading } = trpc.groups.list.useQuery({
-    groupIds: [process.env.EXPO_PUBLIC_GROUP_ID ?? ''],
+  const [recentGroups, setRecentGroups] = useState<RecentGroup[]>([])
+
+  const { data, isLoading, refetch } = trpc.groups.list.useQuery({
+    groupIds: recentGroups.map(({ groupId }) => groupId),
   })
+
+  useEffect(() => {
+    getRecentGroups().then((recentGroups) => {
+      setRecentGroups(recentGroups)
+      refetch()
+    })
+  }, [refetch])
+
   if (isLoading) return <Text>Loading...</Text>
 
   if (!data) return <Text>Error</Text>
@@ -27,14 +39,17 @@ export default function GroupsScreen() {
               }}
               asChild
             >
-              <Pressable className="mx-4 my-2 p-4 bg-slate-100 rounded-md">
+              <Pressable className="mx-4 mb-2 p-4 bg-slate-100 rounded-md">
                 <Text>{group.name}</Text>
               </Pressable>
             </Link>
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <View className="px-4 pt-2">
+            <View className="px-4 py-2 flex-row justify-between items-end">
               <Text className="font-bold">{title}</Text>
+              <Link href="/addGroupByUrlModal" asChild>
+                <Text className="text-green-600">Add by URL</Text>
+              </Link>
             </View>
           )}
         />
