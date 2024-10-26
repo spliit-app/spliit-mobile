@@ -1,4 +1,5 @@
 import { trpc } from '@/utils/trpc'
+import { FontAwesome6 } from '@expo/vector-icons'
 import { Stack, Tabs, useLocalSearchParams } from 'expo-router'
 
 export default function TabLayout() {
@@ -7,8 +8,31 @@ export default function TabLayout() {
   return (
     <>
       <Stack.Screen options={{ title: data?.group?.name ?? '…' }} />
-      <Tabs screenOptions={{ title: data?.group?.name ?? '…' }}>
-        <Tabs.Screen name="index" options={{ headerShown: false }} />
+      <Tabs>
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Expenses',
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome6 name="list" size={28} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="balances"
+          options={{
+            title: 'Balances',
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome6
+                name="money-bill-transfer"
+                size={28}
+                color={color}
+              />
+            ),
+          }}
+        />
       </Tabs>
     </>
   )
