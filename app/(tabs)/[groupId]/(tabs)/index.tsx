@@ -1,7 +1,7 @@
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Expense, trpc } from '@/utils/trpc'
 import dayjs, { Dayjs } from 'dayjs'
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Fragment } from 'react'
 import { Pressable, SafeAreaView, SectionList, Text, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -24,6 +24,7 @@ function ExpenseList({
 }: {
   group: NonNullable<AppRouterOutput['groups']['get']['group']>
 }) {
+  const router = useRouter()
   const { data, fetchNextPage } = trpc.groups.expenses.list.useInfiniteQuery(
     { groupId: group.id, limit: PAGE_SIZE },
     { getNextPageParam: ({ nextCursor }) => nextCursor }
@@ -53,7 +54,15 @@ function ExpenseList({
           sections={sections}
           keyExtractor={(expense) => expense.id}
           renderItem={({ item: expense }) => (
-            <Pressable className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between">
+            <Pressable
+              className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between"
+              onPress={() =>
+                router.push({
+                  pathname: '/(tabs)/[groupId]/expenses/[expenseId]',
+                  params: { groupId: group.id, expenseId: expense.id },
+                })
+              }
+            >
               <View className="gap-1 flex-1">
                 <Text>{expense.title}</Text>
                 <Text className="text-xs text-slate-600">

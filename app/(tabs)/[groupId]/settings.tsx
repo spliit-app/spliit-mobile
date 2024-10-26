@@ -1,19 +1,19 @@
-import { PropsWithChildren } from 'react'
-import {
-  ScrollView,
-  Text,
-  TextInput as BaseTextInput,
-  TextInputProps,
-  View,
-  Pressable,
-  Button,
-} from 'react-native'
+import { ScrollView, Text, View, Pressable, Button } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useForm, Controller } from 'react-hook-form'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { GroupDetails, trpc } from '@/utils/trpc'
 import { groupFormSchema } from 'spliit-api/src/lib/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  ErrorMessage,
+  FormGroup,
+  FormSection,
+  FormSectionTitle,
+  HelpText,
+  Label,
+  TextInput,
+} from '@/components/form'
 
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()
@@ -176,48 +176,5 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
         </Pressable>
       </View>
     </>
-  )
-}
-
-function FormSection({ children }: PropsWithChildren) {
-  return (
-    <View className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between flex-col gap-4">
-      {children}
-    </View>
-  )
-}
-
-function FormSectionTitle({ children }: PropsWithChildren) {
-  return <Text className="text-lg font-bold px-4 mb-2 mt-4">{children}</Text>
-}
-
-function FormGroup({ children }: PropsWithChildren) {
-  return <View className="flex-col gap-1">{children}</View>
-}
-
-function Label({ children }: PropsWithChildren) {
-  return <Text className="font-semibold">{children}</Text>
-}
-
-function HelpText({ children }: PropsWithChildren) {
-  return <Text className="text-gray-600 text-sm">{children}</Text>
-}
-
-function ErrorMessage({ children }: PropsWithChildren) {
-  return <Text className="text-red-600 text-sm">{children}</Text>
-}
-
-function TextInput({
-  hasError,
-  ...props
-}: TextInputProps & { hasError?: boolean }) {
-  return (
-    <BaseTextInput
-      className={
-        'bg-white px-2 pt-1 pb-2 rounded-lg border border-gray-200 text-lg ' +
-        (hasError ? 'border-red-500' : '')
-      }
-      {...props}
-    />
   )
 }
