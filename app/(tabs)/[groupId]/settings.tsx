@@ -6,10 +6,11 @@ import {
   TextInputProps,
   View,
   Pressable,
+  Button,
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useForm, Controller } from 'react-hook-form'
-import { useGlobalSearchParams } from 'expo-router'
+import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { GroupDetails, trpc } from '@/utils/trpc'
 import { groupFormSchema } from 'spliit-api/src/lib/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,15 +18,25 @@ import { zodResolver } from '@hookform/resolvers/zod'
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()
   const { data } = trpc.groups.getDetails.useQuery({ groupId })
+  const router = useRouter()
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView edges={['top']} className="flex-1 bg-white">
-        <ScrollView className="flex-1">
-          {data && <GroupSettingsForm groupDetails={data.group} />}
-        </ScrollView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <Button title="Cancel" onPress={() => router.back()} />
+          ),
+        }}
+      />
+      <SafeAreaProvider>
+        <SafeAreaView edges={['top']} className="flex-1 bg-white">
+          <ScrollView className="flex-1">
+            {data && <GroupSettingsForm groupDetails={data.group} />}
+          </ScrollView>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </>
   )
 }
 
@@ -40,6 +51,7 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
   })
   const { mutateAsync } = trpc.groups.update.useMutation()
   const utils = trpc.useUtils()
+  const router = useRouter()
 
   return (
     <>
@@ -141,7 +153,7 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
         />
       </FormSection>
 
-      <View className="flex-row justify-center mt-2 mb-6">
+      <View className="flex-row mt-2 mb-10 px-4">
         <Pressable
           disabled={isSubmitting}
           style={{ opacity: isSubmitting ? 0.5 : undefined }}
@@ -154,14 +166,13 @@ function GroupSettingsForm({ groupDetails }: { groupDetails: GroupDetails }) {
               },
             })
             await utils.groups.invalidate()
-            return console.log(values)
+            router.back()
           })}
+          className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
         >
-          <View className="bg-emerald-600 rounded-lg px-4 py-2 ">
-            <Text className="text-white text-lg font-semibold">
-              {isSubmitting ? 'Saving…' : 'Save'}
-            </Text>
-          </View>
+          <Text className="text-white text-lg font-semibold">
+            {isSubmitting ? 'Saving…' : 'Save'}
+          </Text>
         </Pressable>
       </View>
     </>

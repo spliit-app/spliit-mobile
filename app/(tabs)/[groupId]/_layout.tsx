@@ -1,49 +1,38 @@
 import { trpc } from '@/utils/trpc'
-import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
-import { Stack, Tabs, useLocalSearchParams } from 'expo-router'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { Pressable } from 'react-native'
 
-export default function TabLayout() {
+export default function GroupLayout() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>()
   const { data } = trpc.groups.get.useQuery({ groupId })
+  const router = useRouter()
   return (
     <>
-      <Stack.Screen options={{ title: data?.group?.name ?? '…' }} />
-      <Tabs>
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: 'Expenses',
-            headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <FontAwesome6 name="list" size={28} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="balances"
-          options={{
-            title: 'Balances',
-            headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <FontAwesome6
-                name="money-bill-transfer"
-                size={28}
-                color={color}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
+      <Stack.Screen
+        options={{
+          title: data?.group?.name ?? '…',
+          headerRight: () => (
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: '/[groupId]/settings',
+                  params: { groupId },
+                })
+              }
+            >
+              <FontAwesome5 name="cog" size={20} color="#059669" />
+            </Pressable>
+          ),
+        }}
+      />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
           name="settings"
-          options={{
-            title: 'Settings',
-            headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <FontAwesome5 name="cog" size={28} color={color} />
-            ),
-          }}
+          options={{ headerTitle: 'Settings', presentation: 'modal' }}
         />
-      </Tabs>
+      </Stack>
     </>
   )
 }
