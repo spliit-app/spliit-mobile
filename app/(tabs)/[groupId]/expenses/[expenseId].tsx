@@ -1,4 +1,6 @@
 import {
+  CategoryInput,
+  DateInput,
   ErrorMessage,
   FormGroup,
   FormSection,
@@ -7,13 +9,14 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
-import { ExpenseDetails, trpc } from '@/utils/trpc'
+import { ExpenseDetails, Group, trpc } from '@/utils/trpc'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { Button, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { expenseFormSchema } from 'spliit-api/src/lib/schemas'
+import CurrencyInput from 'react-native-currency-input'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -22,13 +25,17 @@ export default function ExpenseScreen() {
     expenseId: string
   }>()
 
-  const { data } = trpc.groups.expenses.get.useQuery({ groupId, expenseId })
+  const { data: expenseData } = trpc.groups.expenses.get.useQuery({
+    groupId,
+    expenseId,
+  })
+  const { data: groupData } = trpc.groups.get.useQuery({ groupId })
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: data?.expense.title ?? '…',
+          title: expenseData?.expense.title ?? '…',
           headerRight: () => (
             <Button title="Cancel" onPress={() => router.back()} />
           ),
@@ -37,7 +44,12 @@ export default function ExpenseScreen() {
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} className="flex-1 bg-white">
           <ScrollView>
-            {data && <ExpenseForm expense={data.expense} />}
+            {expenseData && groupData?.group && (
+              <ExpenseForm
+                expense={expenseData.expense}
+                group={groupData.group}
+              />
+            )}
           </ScrollView>
         </SafeAreaView>
       </SafeAreaProvider>
@@ -45,15 +57,27 @@ export default function ExpenseScreen() {
   )
 }
 
-function ExpenseForm({ expense }: { expense: ExpenseDetails }) {
+function ExpenseForm({
+  expense,
+  group,
+}: {
+  expense: ExpenseDetails
+  group: Group
+}) {
+  const { data: categoriesData } = trpc.categories.list.useQuery()
+
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    getValues,
   } = useForm({
     defaultValues: expense,
     resolver: zodResolver(expenseFormSchema),
   })
+
+  console.log(getValues())
+
   return (
     <>
       <FormSectionTitle>Edit expense</FormSectionTitle>
@@ -75,13 +99,79 @@ function ExpenseForm({ expense }: { expense: ExpenseDetails }) {
           <HelpText>Enter a description for the expense.</HelpText>
           {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </FormGroup>
+
+        <FormGroup>
+          <Label>Expense date</Label>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <DateInput
+                value={value}
+                onChange={onChange}
+                hasError={!!errors.expenseDate}
+              />
+            )}
+            name="expenseDate"
+          />
+          <HelpText>Enter the date the expense was paid.</HelpText>
+          {errors.expenseDate && (
+            <ErrorMessage>{errors.expenseDate.message}</ErrorMessage>
+          )}
+        </FormGroup>
+
+        <FormGroup>
+          <Label>Amount</Label>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CurrencyInput
+                onChangeValue={(value) => onChange((value ?? 0) * 100)}
+                onBlur={onBlur}
+                value={value / 100}
+                prefix={group.currency}
+                delimiter=","
+                separator="."
+                renderTextInput={(props) => (
+                  <TextInput {...props} hasError={!!errors.amount} />
+                )}
+              />
+            )}
+            name="amount"
+          />
+          {errors.amount && (
+            <ErrorMessage>{errors.amount.message}</ErrorMessage>
+          )}
+        </FormGroup>
+
+        <FormGroup>
+          <Label>Category</Label>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <CategoryInput
+                value={value}
+                categories={categoriesData?.categories ?? []}
+                onChange={onChange}
+                hasError={!!errors.expenseDate}
+              />
+            )}
+            name="category"
+          />
+          <HelpText>Select the expense category.</HelpText>
+          {errors.category && (
+            <ErrorMessage>{errors.category.message}</ErrorMessage>
+          )}
+        </FormGroup>
       </FormSection>
 
       <View className="flex-row mt-2 mb-10 px-4">
         <Pressable
           disabled={isSubmitting}
           style={{ opacity: isSubmitting ? 0.5 : undefined }}
-          onPress={handleSubmit(async (values) => {})}
+          onPress={() => console.log(expenseFormSchema.safeParse(getValues()))}
+          // onPress={handleSubmit(async (values) => {
+          //   console.log(values)
+          // })}
           className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
         >
           <Text className="text-white text-lg font-semibold">

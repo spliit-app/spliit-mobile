@@ -9,3 +9,5 @@ export type ExpenseDetails =
   AppRouterOutput['groups']['expenses']['get']['expense']
 export type Group = NonNullable<AppRouterOutput['groups']['get']['group']>
 export type GroupDetails = AppRouterOutput['groups']['getDetails']['group']
+export type Category =
+  AppRouterOutput['categories']['list']['categories'][number]
