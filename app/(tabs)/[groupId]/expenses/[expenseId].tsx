@@ -10,7 +10,7 @@ import {
   ParticipantInput,
   TextInput,
 } from '@/components/form'
-import { ExpenseDetails, Group, trpc } from '@/utils/trpc'
+import { Expense, ExpenseDetails, Group, trpc } from '@/utils/trpc'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
@@ -28,6 +28,9 @@ import { expenseFormSchema } from 'spliit-api/src/lib/schemas'
 import CurrencyInput from 'react-native-currency-input'
 import Checkbox from 'expo-checkbox'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import { cn } from '@/utils/cn'
+import { match } from 'ts-pattern'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -82,12 +85,14 @@ function ExpenseForm({
     handleSubmit,
     formState: { errors, isSubmitting },
     getValues,
+    setValue,
+    watch,
   } = useForm({
     defaultValues: expense,
     resolver: zodResolver(expenseFormSchema),
   })
 
-  console.log(getValues())
+  const splitMode = watch('splitMode')
 
   return (
     <>
@@ -228,6 +233,166 @@ function ExpenseForm({
             name="notes"
           />
           {errors.notes && <ErrorMessage>{errors.notes.message}</ErrorMessage>}
+        </FormGroup>
+      </FormSection>
+
+      <FormSectionTitle>Paid for</FormSectionTitle>
+      <FormSection>
+        <FormGroup>
+          <Label className="mb-1">Split mode</Label>
+          <Controller
+            control={control}
+            render={({ field: { value, onChange } }) => {
+              const values: Expense['splitMode'][] = [
+                'EVENLY',
+                'BY_SHARES',
+                'BY_PERCENTAGE',
+                'BY_AMOUNT',
+              ]
+              const labels = ['Evenly', 'Shares', 'Percentage', 'Amount']
+              return (
+                <SegmentedControl
+                  values={labels}
+                  selectedIndex={values.indexOf(value)}
+                  onChange={(event) =>
+                    onChange(values[event.nativeEvent.selectedSegmentIndex])
+                  }
+                />
+              )
+            }}
+            name="splitMode"
+          />
+          <HelpText className="mt-1">Select how to split the expense.</HelpText>
+        </FormGroup>
+
+        <FormGroup className="gap-0">
+          <Controller
+            control={control}
+            name="paidFor"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <>
+                {group.participants.map((participant) => {
+                  const paidForIndex = value.findIndex(
+                    (paidFor) => paidFor.participantId === participant.id
+                  )
+                  const paidFor =
+                    paidForIndex >= 0 ? value[paidForIndex] : undefined
+                  const updatePaidFor = (
+                    participantId: string,
+                    shares: number
+                  ) => {
+                    onChange(
+                      value.map((p) =>
+                        p.participantId === participantId ? { ...p, shares } : p
+                      )
+                    )
+                  }
+
+                  const removePaidFor = (participantId: string) => {
+                    onChange(
+                      value.filter((p) => p.participantId !== participantId)
+                    )
+                  }
+
+                  const addPaidFor = (participantId: string) => {
+                    onChange([...value, { participantId, shares: 0 }])
+                  }
+
+                  return (
+                    <View
+                      key={participant.id}
+                      className={
+                        'flex-row items-center border-gray-200 py-2 border-t h-16'
+                      }
+                    >
+                      <Checkbox
+                        value={paidFor !== undefined}
+                        color="green"
+                        style={{ width: 16, height: 16 }}
+                        className="mr-2"
+                        onValueChange={(value) =>
+                          value
+                            ? addPaidFor(participant.id)
+                            : removePaidFor(participant.id)
+                        }
+                      />
+                      <Pressable
+                        className="flex-1 self-stretch justify-center"
+                        onPress={() =>
+                          paidFor
+                            ? removePaidFor(participant.id)
+                            : addPaidFor(participant.id)
+                        }
+                      >
+                        <Label>{participant.name}</Label>
+                      </Pressable>
+                      {paidFor &&
+                        match(splitMode)
+                          .with('EVENLY', () => null)
+                          .with('BY_SHARES', () => (
+                            <CurrencyInput
+                              value={paidFor.shares / 100}
+                              onChangeValue={(value) =>
+                                updatePaidFor(
+                                  paidFor.participantId,
+                                  (value ?? 0) * 100
+                                )
+                              }
+                              suffix=" shares"
+                              renderTextInput={(props) => (
+                                <TextInput
+                                  className="w-32"
+                                  hasError={!!errors.amount}
+                                  {...props}
+                                />
+                              )}
+                            />
+                          ))
+                          .with('BY_PERCENTAGE', () => (
+                            <CurrencyInput
+                              value={paidFor.shares / 100}
+                              onChangeValue={(value) =>
+                                updatePaidFor(
+                                  paidFor.participantId,
+                                  (value ?? 0) * 100
+                                )
+                              }
+                              suffix=" %"
+                              renderTextInput={(props) => (
+                                <TextInput
+                                  className="w-32"
+                                  hasError={!!errors.amount}
+                                  {...props}
+                                />
+                              )}
+                            />
+                          ))
+                          .with('BY_AMOUNT', () => (
+                            <CurrencyInput
+                              value={paidFor.shares / 100}
+                              onChangeValue={(value) =>
+                                updatePaidFor(
+                                  paidFor.participantId,
+                                  (value ?? 0) * 100
+                                )
+                              }
+                              prefix={group.currency}
+                              renderTextInput={(props) => (
+                                <TextInput
+                                  className="w-32"
+                                  hasError={!!errors.amount}
+                                  {...props}
+                                />
+                              )}
+                            />
+                          ))
+                          .exhaustive()}
+                    </View>
+                  )
+                })}
+              </>
+            )}
+          />
         </FormGroup>
       </FormSection>
 

@@ -11,6 +11,8 @@ import {
   Modal,
   SectionList,
   FlatList,
+  TextProps,
+  ViewProps,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import DateTimePicker from 'react-native-ui-datepicker'
@@ -27,19 +29,16 @@ export function FormSectionTitle({ children }: PropsWithChildren) {
   return <Text className="text-lg font-bold px-4 mb-2 mt-4">{children}</Text>
 }
 
-export function FormGroup({ children }: PropsWithChildren) {
-  return <View className="flex-col gap-1">{children}</View>
+export function FormGroup({ className, ...props }: ViewProps) {
+  return <View className={cn('flex-col gap-1', className)} {...props} />
 }
 
-export function Label({
-  className,
-  children,
-}: PropsWithChildren<{ className?: string }>) {
-  return <Text className={cn('font-semibold', className)}>{children}</Text>
+export function Label({ className, ...props }: TextProps) {
+  return <Text className={cn('font-semibold', className)} {...props} />
 }
 
-export function HelpText({ children }: PropsWithChildren) {
-  return <Text className="text-gray-600 text-sm">{children}</Text>
+export function HelpText({ className, ...props }: TextProps) {
+  return <Text className={cn('text-gray-600 text-sm', className)} {...props} />
 }
 
 export function ErrorMessage({ children }: PropsWithChildren) {
@@ -48,13 +47,15 @@ export function ErrorMessage({ children }: PropsWithChildren) {
 
 export function TextInput({
   hasError,
+  className,
   ...props
 }: TextInputProps & { hasError?: boolean }) {
   return (
     <BaseTextInput
       className={cn(
         'bg-white px-2 pt-1 pb-2 rounded-lg border border-gray-200 text-lg',
-        hasError ? 'border-red-500' : ''
+        hasError ? 'border-red-500' : '',
+        className
       )}
       {...props}
     />

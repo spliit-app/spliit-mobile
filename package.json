@@ -53,7 +53,8 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.14",
     "ts-pattern": "^5.5.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@react-native-segmented-control/segmented-control": "2.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
