@@ -7,16 +7,27 @@ import {
   FormSectionTitle,
   HelpText,
   Label,
+  ParticipantInput,
   TextInput,
 } from '@/components/form'
 import { ExpenseDetails, Group, trpc } from '@/utils/trpc'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
-import { Button, Pressable, ScrollView, Text, View } from 'react-native'
+import {
+  Button,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { expenseFormSchema } from 'spliit-api/src/lib/schemas'
 import CurrencyInput from 'react-native-currency-input'
+import Checkbox from 'expo-checkbox'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -43,14 +54,14 @@ export default function ExpenseScreen() {
       />
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} className="flex-1 bg-white">
-          <ScrollView>
+          <KeyboardAwareScrollView bottomOffset={20}>
             {expenseData && groupData?.group && (
               <ExpenseForm
                 expense={expenseData.expense}
                 group={groupData.group}
               />
             )}
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
       </SafeAreaProvider>
     </>
@@ -141,6 +152,24 @@ function ExpenseForm({
           {errors.amount && (
             <ErrorMessage>{errors.amount.message}</ErrorMessage>
           )}
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <View className="flex-row items-center gap-2 mt-1">
+                <Checkbox
+                  value={value}
+                  onValueChange={onChange}
+                  color="green"
+                  style={{ width: 16, height: 16 }}
+                />
+                <Pressable onPress={() => onChange(!value)}>
+                  <Label className="font-normal">This is a reimbursement</Label>
+                </Pressable>
+              </View>
+            )}
+            name="isReimbursement"
+          />
         </FormGroup>
 
         <FormGroup>
@@ -161,6 +190,44 @@ function ExpenseForm({
           {errors.category && (
             <ErrorMessage>{errors.category.message}</ErrorMessage>
           )}
+        </FormGroup>
+
+        <FormGroup>
+          <Label>Paid by</Label>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ParticipantInput
+                value={value}
+                participants={group.participants}
+                onChange={onChange}
+                hasError={!!errors.paidBy}
+              />
+            )}
+            name="paidBy"
+          />
+          <HelpText>Select the participant who paid the expense.</HelpText>
+          {errors.paidBy && (
+            <ErrorMessage>{errors.paidBy.message}</ErrorMessage>
+          )}
+        </FormGroup>
+
+        <FormGroup>
+          <Label>Notes</Label>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value ?? ''}
+                hasError={!!errors.title}
+                multiline
+              />
+            )}
+            name="notes"
+          />
+          {errors.notes && <ErrorMessage>{errors.notes.message}</ErrorMessage>}
         </FormGroup>
       </FormSection>
 

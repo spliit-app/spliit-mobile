@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn'
-import { Category, trpc } from '@/utils/trpc'
+import { Category, Group, GroupParticipant, trpc } from '@/utils/trpc'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { PropsWithChildren, useState } from 'react'
 import {
@@ -10,6 +10,7 @@ import {
   Pressable,
   Modal,
   SectionList,
+  FlatList,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import DateTimePicker from 'react-native-ui-datepicker'
@@ -30,8 +31,11 @@ export function FormGroup({ children }: PropsWithChildren) {
   return <View className="flex-col gap-1">{children}</View>
 }
 
-export function Label({ children }: PropsWithChildren) {
-  return <Text className="font-semibold">{children}</Text>
+export function Label({
+  className,
+  children,
+}: PropsWithChildren<{ className?: string }>) {
+  return <Text className={cn('font-semibold', className)}>{children}</Text>
 }
 
 export function HelpText({ children }: PropsWithChildren) {
@@ -88,7 +92,7 @@ export function CategoryInput({
           className="ml-1 mr-2.5"
         />
         <Text className="text-lg flex-1">
-          {value?.name ?? 'Select a category'}
+          {value?.name ?? 'Select a participant'}
         </Text>
       </Pressable>
       <Modal
@@ -100,6 +104,59 @@ export function CategoryInput({
         <CategoryInputModalContent
           category={value}
           categories={categories}
+          onSubmit={(date) => {
+            onChange(date)
+            setOpen(false)
+          }}
+          onCancel={() => setOpen(false)}
+        />
+      </Modal>
+    </>
+  )
+}
+export function ParticipantInput({
+  value,
+  participants,
+  onChange,
+  hasError = false,
+}: {
+  value: GroupParticipant | null
+  participants: GroupParticipant[]
+  onChange: (participant: GroupParticipant) => void
+  hasError?: boolean
+}) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Pressable
+        className={cn(
+          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center',
+          hasError && 'border-red-500'
+        )}
+        onPress={() => {
+          setOpen(true)
+        }}
+      >
+        <FontAwesome6
+          name="user-large"
+          color="gray"
+          size={14}
+          className="ml-1 mr-2.5"
+        />
+        <Text className="text-lg flex-1">
+          {value?.name ?? 'Select a participant'}
+        </Text>
+      </Pressable>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={open}
+        onRequestClose={() => setOpen(false)}
+      >
+        <ParticipantInputModalContent
+          participant={value}
+          participants={participants}
           onSubmit={(date) => {
             onChange(date)
             setOpen(false)
@@ -159,6 +216,72 @@ export function DateInput({
         />
       </Modal>
     </>
+  )
+}
+
+function ParticipantInputModalContent({
+  participant: initialParticipant,
+  participants: participants,
+  onCancel,
+  onSubmit,
+}: {
+  participant: GroupParticipant | null
+  participants: GroupParticipant[]
+  onCancel: () => void
+  onSubmit: (participant: GroupParticipant) => void
+}) {
+  const [participant, setParticipant] = useState(initialParticipant)
+
+  return (
+    <View className="h-full relative justify-center p-2">
+      <Pressable
+        onPress={() => onCancel()}
+        className="absolute top-0 bottom-0 right-0 left-0 bg-gray-500 opacity-80"
+      />
+      <View className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <View className="h-[400px]">
+          <FlatList
+            data={participants}
+            keyExtractor={({ id }) => String(id)}
+            renderItem={({ item, index }) => (
+              <Pressable
+                className={cn(
+                  'py-3 border-gray-200 ml-4 pr-4 flex-row',
+                  index > 0 && 'border-t'
+                )}
+                onPress={() => setParticipant(item)}
+              >
+                <Text
+                  className={cn(
+                    'flex-1 items-center text-lg',
+                    participant?.id === item.id && 'font-semibold'
+                  )}
+                >
+                  {item.name}
+                </Text>
+                {participant?.id === item.id && (
+                  <FontAwesome6 name="check" size={16} className="mt-1" />
+                )}
+              </Pressable>
+            )}
+          />
+        </View>
+        <View className="flex-row gap-4 justify-end border-t border-gray-200 p-2">
+          <Pressable
+            className="px-4 py-2 rounded-lg"
+            onPress={() => onCancel()}
+          >
+            <Text className="text-lg font-semibold">Close</Text>
+          </Pressable>
+          <Pressable
+            className="bg-emerald-600 px-4 py-2 rounded-lg"
+            onPress={() => participant && onSubmit(participant)}
+          >
+            <Text className="text-white text-lg font-semibold">Save</Text>
+          </Pressable>
+        </View>
+      </View>
+    </View>
   )
 }
 
