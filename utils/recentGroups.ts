@@ -34,3 +34,15 @@ export async function addRecentGroup(recentGroup: RecentGroup) {
     console.error(err)
   }
 }
+
+export async function removeRecentGroup(groupId: string) {
+  const recentGroups = await getRecentGroups()
+  try {
+    await AsyncStorage.setItem(
+      'recent-groups',
+      JSON.stringify(recentGroups.filter((g) => g.groupId !== groupId))
+    )
+  } catch (err) {
+    console.error(err)
+  }
+}

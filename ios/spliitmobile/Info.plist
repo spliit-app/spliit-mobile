@@ -28,6 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>app.spliit.spliitmobile</string>
+          <string>app.spliit.spliitmobile</string>
         </array>
       </dict>
     </array>

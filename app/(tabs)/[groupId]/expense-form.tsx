@@ -90,6 +90,7 @@ export function ExpenseForm({
                 onBlur={onBlur}
                 value={value}
                 hasError={!!errors.title}
+                placeholder="e.g. Restaurant"
               />
             )}
             name="title"
@@ -219,6 +220,7 @@ export function ExpenseForm({
                 value={value ?? ''}
                 hasError={!!errors.notes}
                 multiline
+                placeholder="Any relevant information to add?"
               />
             )}
             name="notes"
@@ -291,7 +293,7 @@ export function ExpenseForm({
                   }
 
                   const addPaidFor = (participant: string) => {
-                    onChange([...value, { participant, shares: 0 }])
+                    onChange([...value, { participant, shares: 1 }])
                   }
 
                   return (

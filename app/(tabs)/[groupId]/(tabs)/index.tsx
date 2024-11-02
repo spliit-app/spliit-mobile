@@ -1,9 +1,18 @@
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Expense, trpc } from '@/utils/trpc'
+import { FontAwesome6 } from '@expo/vector-icons'
+import { MenuView } from '@react-native-menu/menu'
 import dayjs, { Dayjs } from 'dayjs'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Fragment } from 'react'
-import { Pressable, SafeAreaView, SectionList, Text, View } from 'react-native'
+import {
+  Platform,
+  Pressable,
+  SafeAreaView,
+  SectionList,
+  Text,
+  View,
+} from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AppRouterOutput } from 'spliit-api'
 import { match } from 'ts-pattern'
@@ -25,10 +34,13 @@ function ExpenseList({
   group: NonNullable<AppRouterOutput['groups']['get']['group']>
 }) {
   const router = useRouter()
-  const { data, fetchNextPage } = trpc.groups.expenses.list.useInfiniteQuery(
-    { groupId: group.id, limit: PAGE_SIZE },
-    { getNextPageParam: ({ nextCursor }) => nextCursor }
-  )
+  const { data, fetchNextPage, refetch } =
+    trpc.groups.expenses.list.useInfiniteQuery(
+      { groupId: group.id, limit: PAGE_SIZE },
+      { getNextPageParam: ({ nextCursor }) => nextCursor }
+    )
+  const { mutateAsync: deleteAsync } = trpc.groups.expenses.delete.useMutation()
+  const utils = trpc.useUtils()
 
   const expenses = data?.pages.flatMap((page) => page.expenses)
   const hasMore = data?.pages.at(-1)?.hasMore ?? false
@@ -79,39 +91,86 @@ function ExpenseList({
             sections={sections}
             keyExtractor={(expense) => expense.id}
             renderItem={({ item: expense }) => (
-              <Pressable
-                className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between"
-                onPress={() =>
-                  router.push({
-                    pathname: '/(tabs)/[groupId]/expenses/[expenseId]',
-                    params: { groupId: group.id, expenseId: expense.id },
-                  })
-                }
-              >
-                <View className="gap-1 flex-1">
-                  <Text>{expense.title}</Text>
-                  <Text className="text-xs text-slate-600">
-                    Paid by{' '}
-                    <Text className="font-bold">{expense.paidBy.name}</Text> for{' '}
-                    {expense.paidFor.map(({ participant }, index) => (
-                      <Fragment key={index}>
-                        {index > 0 && ', '}
-                        <Text className="font-bold">{participant.name}</Text>
-                      </Fragment>
-                    ))}
-                  </Text>
-                </View>
-                <View className="gap-1 items-end flex-shrink-0 justify-between">
-                  <Text className="font-bold">
-                    {formatCurrency(group.currency, expense.amount / 100)}
-                  </Text>
-                  <Text className="text-xs text-slate-600">
-                    {expense.createdAt.toLocaleDateString('en-US', {
-                      dateStyle: 'medium',
-                    })}
-                  </Text>
-                </View>
-              </Pressable>
+              <View className="bg-slate-100 rounded-md mb-2 mx-4 flex-row">
+                <Pressable
+                  className="py-4 pl-4 flex-row flex-1"
+                  onPress={() =>
+                    router.push({
+                      pathname: '/(tabs)/[groupId]/expenses/[expenseId]',
+                      params: { groupId: group.id, expenseId: expense.id },
+                    })
+                  }
+                >
+                  <View className="gap-1 flex-1">
+                    <Text>{expense.title}</Text>
+                    <Text className="text-xs text-slate-600">
+                      Paid by{' '}
+                      <Text className="font-bold">{expense.paidBy.name}</Text>{' '}
+                      for{' '}
+                      {expense.paidFor.map(({ participant }, index) => (
+                        <Fragment key={index}>
+                          {index > 0 && ', '}
+                          <Text className="font-bold">{participant.name}</Text>
+                        </Fragment>
+                      ))}
+                    </Text>
+                  </View>
+                  <View className="gap-1 items-end flex-shrink-0 justify-between">
+                    <Text className="font-bold">
+                      {formatCurrency(group.currency, expense.amount / 100)}
+                    </Text>
+                    <Text className="text-xs text-slate-600">
+                      {expense.createdAt.toLocaleDateString('en-US', {
+                        dateStyle: 'medium',
+                      })}
+                    </Text>
+                  </View>
+                </Pressable>
+
+                <MenuView
+                  title="Expense actions"
+                  onPressAction={({ nativeEvent }) => {
+                    match(nativeEvent.event)
+                      .with('open', () => {
+                        router.push({
+                          pathname: '/(tabs)/[groupId]/expenses/[expenseId]',
+                          params: { groupId: group.id, expenseId: expense.id },
+                        })
+                      })
+                      .with('delete', () => {
+                        deleteAsync({
+                          groupId: group.id,
+                          expenseId: expense.id,
+                        }).then(() => {
+                          utils.groups.invalidate()
+                        })
+                      })
+                  }}
+                  actions={[
+                    {
+                      id: 'open',
+                      title: 'Edit expense',
+                    },
+                    {
+                      id: 'delete',
+                      title: 'Delete expense',
+                      attributes: {
+                        destructive: true,
+                      },
+                      image: Platform.select({
+                        ios: 'trash',
+                        android: 'ic_menu_delete',
+                      }),
+                    },
+                  ]}
+                  shouldOpenOnLongPress={false}
+                  style={{ flexDirection: 'row', alignItems: 'stretch' }}
+                >
+                  <View className="px-4 py-4 flex-row items-center">
+                    <FontAwesome6 name="ellipsis" />
+                  </View>
+                </MenuView>
+              </View>
             )}
             renderSectionHeader={({ section: { title } }) =>
               title === 'HEADER' ? (

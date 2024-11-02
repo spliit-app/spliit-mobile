@@ -38,7 +38,7 @@ export default function GroupLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="settings"
-          options={{ headerTitle: 'Settings', presentation: 'modal' }}
+          options={{ headerTitle: 'Group settings', presentation: 'modal' }}
         />
         <Stack.Screen
           name="expenses/[expenseId]"
