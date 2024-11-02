@@ -36,6 +36,10 @@ export default function GroupLayout() {
           name="expenses/[expenseId]"
           options={{ presentation: 'modal' }}
         />
+        <Stack.Screen
+          name="create-expense"
+          options={{ presentation: 'modal' }}
+        />
       </Stack>
     </>
   )

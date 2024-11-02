@@ -3,29 +3,24 @@ import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { Button } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import { ExpenseForm } from '../expense-form'
+import { ExpenseForm } from './expense-form'
 
 export default function ExpenseScreen() {
   const router = useRouter()
-  const { groupId, expenseId } = useGlobalSearchParams<{
+  const { groupId } = useGlobalSearchParams<{
     groupId: string
-    expenseId: string
   }>()
 
-  const { data: expenseData } = trpc.groups.expenses.get.useQuery({
-    groupId,
-    expenseId,
-  })
   const { data: groupData } = trpc.groups.get.useQuery({ groupId })
 
-  const { mutateAsync } = trpc.groups.expenses.update.useMutation()
+  const { mutateAsync } = trpc.groups.expenses.create.useMutation()
   const utils = trpc.useUtils()
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: expenseData?.expense.title ?? '…',
+          title: 'Add expense',
           headerRight: () => (
             <Button title="Cancel" onPress={() => router.back()} />
           ),
@@ -34,13 +29,12 @@ export default function ExpenseScreen() {
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} className="flex-1 bg-white">
           <KeyboardAwareScrollView bottomOffset={20}>
-            {expenseData && groupData?.group && (
+            {groupData?.group && (
               <ExpenseForm
-                expense={expenseData.expense}
+                expense={null}
                 group={groupData.group}
                 onSave={async (expenseFormValues) => {
-                  console.log({ expenseFormValues })
-                  await mutateAsync({ groupId, expenseId, expenseFormValues })
+                  await mutateAsync({ groupId, expenseFormValues })
                   await utils.groups.invalidate()
                   router.back()
                 }}

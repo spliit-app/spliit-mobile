@@ -1,5 +1,6 @@
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Expense, trpc } from '@/utils/trpc'
+import { FontAwesome6 } from '@expo/vector-icons'
 import dayjs, { Dayjs } from 'dayjs'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Fragment } from 'react'
@@ -47,6 +48,8 @@ function ExpenseList({
     data: expenses,
   }))
 
+  sections.unshift({ title: 'HEADER', data: [] })
+
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-white">
@@ -88,11 +91,29 @@ function ExpenseList({
               </View>
             </Pressable>
           )}
-          renderSectionHeader={({ section: { title } }) => (
-            <View className="px-4 pt-4 pb-2 bg-white">
-              <Text className="font-bold">{title}</Text>
-            </View>
-          )}
+          renderSectionHeader={({ section: { title } }) =>
+            title === 'HEADER' ? (
+              <View className="px-4 pt-4 mt-2 bg-white flex-row justify-between items-baseline">
+                <Text className="font-bold text-lg">Expenses</Text>
+                <Pressable
+                  onPress={() =>
+                    router.push({
+                      pathname: '/[groupId]/create-expense',
+                      params: { groupId: group.id },
+                    })
+                  }
+                >
+                  <Text className="text-emerald-600 text-lg">Add expense</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <View className="px-4 pt-4 pb-2 bg-white">
+                <Text className="font-bold text-slate-500 text-xs uppercase">
+                  {title}
+                </Text>
+              </View>
+            )
+          }
           onEndReached={() => {
             if (hasMore) fetchNextPage()
           }}
