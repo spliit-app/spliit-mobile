@@ -2,34 +2,9 @@
   "expo": {
     "name": "spliit-mobile",
     "slug": "spliit-mobile",
+    "scheme": "app.spliit.spliitmobile",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "spliit",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "dev.scastiel.spliit-mobile"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router"
-    ],
+    "newArchEnabled": true,
     "experiments": {
       "typedRoutes": true
     },
@@ -37,6 +12,12 @@
       "eas": {
         "projectId": "21de7c0f-2085-481d-a2a9-73cfe879d271"
       }
+    },
+    "android": {
+      "package": "app.spliit.spliitmobile"
+    },
+    "ios": {
+      "bundleIdentifier": "app.spliit.spliitmobile"
     }
   }
 }

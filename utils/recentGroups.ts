@@ -11,8 +11,8 @@ const recentGroupsSchema = z.array(
 export type RecentGroup = z.infer<typeof recentGroupsSchema>[number]
 
 export async function getRecentGroups(): Promise<RecentGroup[]> {
-  const raw = await AsyncStorage.getItem('recent-groups')
   try {
+    const raw = await AsyncStorage.getItem('recent-groups')
     return recentGroupsSchema.parse(raw ? JSON.parse(raw) : [])
   } catch {
     return []

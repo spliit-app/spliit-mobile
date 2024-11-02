@@ -71,6 +71,7 @@ export default function ExpenseScreen() {
                 onSave={async (expenseFormValues) => {
                   await mutateAsync({ groupId, expenseId, expenseFormValues })
                   await utils.groups.invalidate()
+                  router.back()
                 }}
               />
             )}
