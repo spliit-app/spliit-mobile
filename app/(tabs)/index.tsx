@@ -22,6 +22,7 @@ export default function GroupsScreen() {
   const navigation = useNavigation()
   const pathname = usePathname()
   useEffect(() => {
+    console.log('HELLO', navigation.isFocused())
     if (navigation.isFocused()) {
       fetchGroups()
     }
@@ -33,7 +34,7 @@ export default function GroupsScreen() {
 
   const sections = [
     {
-      title: 'Recent groups',
+      title: 'Recent Groups',
       data: recentGroups
         .map((recentGroup) =>
           data.groups.find((group) => group.id === recentGroup.groupId)
@@ -64,9 +65,14 @@ export default function GroupsScreen() {
           renderSectionHeader={({ section: { title } }) => (
             <View className="px-4 py-2 mt-2 flex-row justify-between items-baseline">
               <Text className="text-lg font-bold">{title}</Text>
-              <Link href="/addGroupByUrlModal" asChild>
-                <Text className="text-lg text-emerald-600">Add by URL</Text>
-              </Link>
+              <View className="flex-row gap-4">
+                <Link href="/create-group" asChild>
+                  <Text className="text-lg text-emerald-600">Create</Text>
+                </Link>
+                <Link href="/add-group-by-url" asChild>
+                  <Text className="text-lg text-emerald-600">Add by URL</Text>
+                </Link>
+              </View>
             </View>
           )}
         />
