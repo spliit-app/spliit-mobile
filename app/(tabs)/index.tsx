@@ -22,7 +22,6 @@ export default function GroupsScreen() {
   const navigation = useNavigation()
   const pathname = usePathname()
   useEffect(() => {
-    console.log('HELLO', navigation.isFocused())
     if (navigation.isFocused()) {
       fetchGroups()
     }
