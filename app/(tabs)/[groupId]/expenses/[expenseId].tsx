@@ -24,7 +24,10 @@ import {
   View,
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { expenseFormSchema } from 'spliit-api/src/lib/schemas'
+import {
+  ExpenseFormValues,
+  expenseFormSchema,
+} from 'spliit-api/src/lib/schemas'
 import CurrencyInput from 'react-native-currency-input'
 import Checkbox from 'expo-checkbox'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
@@ -45,6 +48,9 @@ export default function ExpenseScreen() {
   })
   const { data: groupData } = trpc.groups.get.useQuery({ groupId })
 
+  const { mutateAsync } = trpc.groups.expenses.update.useMutation()
+  const utils = trpc.useUtils()
+
   return (
     <>
       <Stack.Screen
@@ -62,6 +68,10 @@ export default function ExpenseScreen() {
               <ExpenseForm
                 expense={expenseData.expense}
                 group={groupData.group}
+                onSave={async (expenseFormValues) => {
+                  await mutateAsync({ groupId, expenseId, expenseFormValues })
+                  await utils.groups.invalidate()
+                }}
               />
             )}
           </KeyboardAwareScrollView>
@@ -74,9 +84,11 @@ export default function ExpenseScreen() {
 function ExpenseForm({
   expense,
   group,
+  onSave,
 }: {
   expense: ExpenseDetails
   group: Group
+  onSave: (expenseFormValues: ExpenseFormValues) => Promise<void>
 }) {
   const { data: categoriesData } = trpc.categories.list.useQuery()
 
@@ -88,7 +100,22 @@ function ExpenseForm({
     setValue,
     watch,
   } = useForm({
-    defaultValues: expense,
+    defaultValues: {
+      title: expense.title,
+      expenseDate: expense.expenseDate ?? new Date(),
+      amount: String(expense.amount / 100) as unknown as number, // hack
+      category: expense.categoryId,
+      paidBy: expense.paidById,
+      paidFor: expense.paidFor.map(({ participantId, shares }) => ({
+        participant: participantId,
+        shares: String(shares / 100) as unknown as number,
+      })),
+      splitMode: expense.splitMode,
+      saveDefaultSplittingOptions: false,
+      isReimbursement: expense.isReimbursement,
+      documents: expense.documents,
+      notes: expense.notes ?? '',
+    },
     resolver: zodResolver(expenseFormSchema),
   })
 
@@ -141,9 +168,9 @@ function ExpenseForm({
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <CurrencyInput
-                onChangeValue={(value) => onChange((value ?? 0) * 100)}
+                onChangeValue={(value) => onChange(value ?? 0)}
                 onBlur={onBlur}
-                value={value / 100}
+                value={value}
                 prefix={group.currency}
                 delimiter=","
                 separator="."
@@ -183,10 +210,13 @@ function ExpenseForm({
             control={control}
             render={({ field: { onChange, value } }) => (
               <CategoryInput
-                value={value}
+                value={
+                  categoriesData?.categories.find((cat) => cat.id === value) ??
+                  null
+                }
                 categories={categoriesData?.categories ?? []}
-                onChange={onChange}
-                hasError={!!errors.expenseDate}
+                onChange={(cat) => onChange(cat.id)}
+                hasError={!!errors.category}
               />
             )}
             name="category"
@@ -203,9 +233,13 @@ function ExpenseForm({
             control={control}
             render={({ field: { onChange, value } }) => (
               <ParticipantInput
-                value={value}
+                value={
+                  group.participants.find(
+                    (participant) => participant.id === value
+                  ) ?? null
+                }
                 participants={group.participants}
-                onChange={onChange}
+                onChange={(p) => onChange(p.id)}
                 hasError={!!errors.paidBy}
               />
             )}
@@ -273,7 +307,7 @@ function ExpenseForm({
               <>
                 {group.participants.map((participant) => {
                   const paidForIndex = value.findIndex(
-                    (paidFor) => paidFor.participantId === participant.id
+                    (paidFor) => paidFor.participant === participant.id
                   )
                   const paidFor =
                     paidForIndex >= 0 ? value[paidForIndex] : undefined
@@ -283,19 +317,17 @@ function ExpenseForm({
                   ) => {
                     onChange(
                       value.map((p) =>
-                        p.participantId === participantId ? { ...p, shares } : p
+                        p.participant === participantId ? { ...p, shares } : p
                       )
                     )
                   }
 
-                  const removePaidFor = (participantId: string) => {
-                    onChange(
-                      value.filter((p) => p.participantId !== participantId)
-                    )
+                  const removePaidFor = (participant: string) => {
+                    onChange(value.filter((p) => p.participant !== participant))
                   }
 
-                  const addPaidFor = (participantId: string) => {
-                    onChange([...value, { participantId, shares: 0 }])
+                  const addPaidFor = (participant: string) => {
+                    onChange([...value, { participant, shares: 0 }])
                   }
 
                   return (
@@ -331,18 +363,16 @@ function ExpenseForm({
                           .with('EVENLY', () => null)
                           .with('BY_SHARES', () => (
                             <CurrencyInput
-                              value={paidFor.shares / 100}
+                              value={paidFor.shares}
                               onChangeValue={(value) =>
-                                updatePaidFor(
-                                  paidFor.participantId,
-                                  (value ?? 0) * 100
-                                )
+                                updatePaidFor(paidFor.participant, value ?? 0)
                               }
                               suffix=" shares"
+                              precision={0}
                               renderTextInput={(props) => (
                                 <TextInput
                                   className="w-32"
-                                  hasError={!!errors.amount}
+                                  hasError={!!errors.paidFor}
                                   {...props}
                                 />
                               )}
@@ -350,18 +380,18 @@ function ExpenseForm({
                           ))
                           .with('BY_PERCENTAGE', () => (
                             <CurrencyInput
-                              value={paidFor.shares / 100}
+                              value={paidFor.shares}
                               onChangeValue={(value) =>
-                                updatePaidFor(
-                                  paidFor.participantId,
-                                  (value ?? 0) * 100
-                                )
+                                updatePaidFor(paidFor.participant, value ?? 0)
                               }
                               suffix=" %"
+                              precision={0}
+                              delimiter=","
+                              separator="."
                               renderTextInput={(props) => (
                                 <TextInput
                                   className="w-32"
-                                  hasError={!!errors.amount}
+                                  hasError={!!errors.paidFor}
                                   {...props}
                                 />
                               )}
@@ -369,18 +399,18 @@ function ExpenseForm({
                           ))
                           .with('BY_AMOUNT', () => (
                             <CurrencyInput
-                              value={paidFor.shares / 100}
+                              value={paidFor.shares}
                               onChangeValue={(value) =>
-                                updatePaidFor(
-                                  paidFor.participantId,
-                                  (value ?? 0) * 100
-                                )
+                                updatePaidFor(paidFor.participant, value ?? 0)
                               }
                               prefix={group.currency}
+                              precision={2}
+                              delimiter=","
+                              separator="."
                               renderTextInput={(props) => (
                                 <TextInput
                                   className="w-32"
-                                  hasError={!!errors.amount}
+                                  hasError={!!errors.paidFor}
                                   {...props}
                                 />
                               )}
@@ -393,6 +423,9 @@ function ExpenseForm({
               </>
             )}
           />
+          {errors.paidFor && (
+            <ErrorMessage>{errors.paidFor.message}</ErrorMessage>
+          )}
         </FormGroup>
       </FormSection>
 
@@ -400,10 +433,9 @@ function ExpenseForm({
         <Pressable
           disabled={isSubmitting}
           style={{ opacity: isSubmitting ? 0.5 : undefined }}
-          onPress={() => console.log(expenseFormSchema.safeParse(getValues()))}
-          // onPress={handleSubmit(async (values) => {
-          //   console.log(values)
-          // })}
+          onPress={handleSubmit(async (values) => {
+            await onSave(values)
+          })}
           className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
         >
           <Text className="text-white text-lg font-semibold">
