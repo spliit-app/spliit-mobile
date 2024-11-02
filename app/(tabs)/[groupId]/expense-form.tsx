@@ -22,6 +22,7 @@ import CurrencyInput from 'react-native-currency-input'
 import Checkbox from 'expo-checkbox'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { match } from 'ts-pattern'
+import { BRAND_COLOR } from '@/utils/colors'
 
 export function ExpenseForm({
   expense,
@@ -148,7 +149,7 @@ export function ExpenseForm({
                 <Checkbox
                   value={value}
                   onValueChange={onChange}
-                  color="green"
+                  color={BRAND_COLOR}
                   style={{ width: 16, height: 16 }}
                 />
                 <Pressable onPress={() => onChange(!value)}>
@@ -302,7 +303,7 @@ export function ExpenseForm({
                     >
                       <Checkbox
                         value={paidFor !== undefined}
-                        color="green"
+                        color={BRAND_COLOR}
                         style={{ width: 16, height: 16 }}
                         className="mr-2"
                         onValueChange={(value) =>

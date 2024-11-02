@@ -1,7 +1,7 @@
 import { trpc } from '@/utils/trpc'
-import { FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { Pressable } from 'react-native'
+import { Pressable, Text } from 'react-native'
 
 export default function GroupLayout() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>()
@@ -12,6 +12,14 @@ export default function GroupLayout() {
       <Stack.Screen
         options={{
           title: data?.group?.name ?? '…',
+          headerLeft: () => (
+            <Pressable
+              className="flex-row items-center gap-2"
+              onPress={() => router.back()}
+            >
+              <FontAwesome6 size={20} color="#059669" name="chevron-left" />
+            </Pressable>
+          ),
           headerRight: () => (
             <Pressable
               onPress={() =>

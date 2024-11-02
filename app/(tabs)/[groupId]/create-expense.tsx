@@ -4,6 +4,7 @@ import { Button } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { ExpenseForm } from './expense-form'
+import { BRAND_COLOR } from '@/utils/colors'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -22,7 +23,11 @@ export default function ExpenseScreen() {
         options={{
           title: 'Add expense',
           headerRight: () => (
-            <Button title="Cancel" onPress={() => router.back()} />
+            <Button
+              title="Cancel"
+              color={BRAND_COLOR}
+              onPress={() => router.back()}
+            />
           ),
         }}
       />

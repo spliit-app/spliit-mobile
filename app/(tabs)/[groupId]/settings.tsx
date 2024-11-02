@@ -14,6 +14,7 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
+import { BRAND_COLOR } from '@/utils/colors'
 
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()
@@ -25,7 +26,11 @@ export default function GroupSettingsScreen() {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Button title="Cancel" onPress={() => router.back()} />
+            <Button
+              title="Cancel"
+              color={BRAND_COLOR}
+              onPress={() => router.back()}
+            />
           ),
         }}
       />

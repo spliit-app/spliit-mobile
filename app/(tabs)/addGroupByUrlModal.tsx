@@ -1,3 +1,4 @@
+import { BRAND_COLOR } from '@/utils/colors'
 import { addRecentGroup } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
 import { Stack, useRouter } from 'expo-router'
@@ -17,7 +18,11 @@ export default function AddGroupByUrlModal() {
         options={{
           title: 'Add group by URL',
           headerRight: () => (
-            <Button title="Cancel" onPress={() => router.back()} />
+            <Button
+              title="Cancel"
+              color={BRAND_COLOR}
+              onPress={() => router.back()}
+            />
           ),
         }}
       />

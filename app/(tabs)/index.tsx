@@ -33,7 +33,7 @@ export default function GroupsScreen() {
 
   const sections = [
     {
-      title: 'Groups',
+      title: 'Recent groups',
       data: recentGroups
         .map((recentGroup) =>
           data.groups.find((group) => group.id === recentGroup.groupId)
@@ -62,10 +62,10 @@ export default function GroupsScreen() {
             </Link>
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <View className="px-4 py-2 flex-row justify-between items-end">
-              <Text className="font-bold">{title}</Text>
+            <View className="px-4 py-2 mt-2 flex-row justify-between items-baseline">
+              <Text className="text-lg font-bold">{title}</Text>
               <Link href="/addGroupByUrlModal" asChild>
-                <Text className="text-green-600">Add by URL</Text>
+                <Text className="text-lg text-emerald-600">Add by URL</Text>
               </Link>
             </View>
           )}
