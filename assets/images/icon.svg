@@ -5,7 +5,7 @@
    id="svg159"
    sodipodi:docname="icon.svg"
    inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
-   inkscape:export-filename="icon.png"
+   inkscape:export-filename="icon-dark.png"
    inkscape:export-xdpi="192"
    inkscape:export-ydpi="192"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -38,13 +38,6 @@
   </defs>
   <title
      id="title136" />
-  <rect
-     style="fill:#ffffff;stroke:#94a3b8;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-     id="rect1356"
-     width="512"
-     height="512"
-     x="6.7162523e-07"
-     y="6.1644658e-07" />
   <g
      data-name="1 funnel"
      id="_1_funnel"

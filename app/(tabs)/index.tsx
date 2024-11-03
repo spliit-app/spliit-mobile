@@ -24,6 +24,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { MenuView } from '@react-native-menu/menu'
 import { match } from 'ts-pattern'
 import { FontAwesome6 } from '@expo/vector-icons'
+import { Image } from 'expo-image'
 
 export default function GroupsScreen() {
   const [recentGroups, setRecentGroups] = useState<RecentGroup[] | null>(null)
@@ -48,6 +49,7 @@ export default function GroupsScreen() {
   }, [pathname, navigation, fetchGroups])
 
   const sections = [
+    { title: 'HEADER', data: [] },
     {
       title: 'Recent Groups',
       data: recentGroups ?? [],
@@ -64,7 +66,15 @@ export default function GroupsScreen() {
           </View>
         ) : recentGroups.length === 0 ? (
           <View className="h-full flex-col items-center justify-center">
-            <Text className="text-xl font-semibold">Welcome to Spliit!</Text>
+            <Image
+              source={require('../../assets/images/logo-with-text.png')}
+              contentFit="contain"
+              contentPosition="top center"
+              style={{ height: 64, width: '100%' }}
+            />
+            <Text className="text-xl font-semibold mt-8">
+              Welcome to Spliit!
+            </Text>
             <Text className="text-lg">
               You are now ready to create your first group.
             </Text>
@@ -186,19 +196,32 @@ export default function GroupsScreen() {
                 </View>
               )
             }}
-            renderSectionHeader={({ section: { title } }) => (
-              <View className="px-4 py-2 mt-2 flex-row justify-between items-baseline">
-                <Text className="text-lg font-bold">{title}</Text>
-                <View className="flex-row gap-4">
-                  <Link href="/create-group" asChild>
-                    <Text className="text-lg text-emerald-600">Create</Text>
-                  </Link>
-                  <Link href="/add-group-by-url" asChild>
-                    <Text className="text-lg text-emerald-600">Add by URL</Text>
-                  </Link>
+            renderSectionHeader={({ section: { title } }) =>
+              title === 'HEADER' ? (
+                <View className="p-4">
+                  <Image
+                    source={require('../../assets/images/logo-with-text.png')}
+                    contentFit="contain"
+                    contentPosition="left top"
+                    style={{ height: 48 }}
+                  />
                 </View>
-              </View>
-            )}
+              ) : (
+                <View className="px-4 py-2 mt-2 flex-row justify-between items-baseline">
+                  <Text className="text-lg font-bold">{title}</Text>
+                  <View className="flex-row gap-4">
+                    <Link href="/create-group" asChild>
+                      <Text className="text-lg text-emerald-600">Create</Text>
+                    </Link>
+                    <Link href="/add-group-by-url" asChild>
+                      <Text className="text-lg text-emerald-600">
+                        Add by URL
+                      </Text>
+                    </Link>
+                  </View>
+                </View>
+              )
+            }
           />
         )}
       </SafeAreaView>
