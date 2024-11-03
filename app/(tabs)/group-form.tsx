@@ -120,7 +120,7 @@ export function GroupForm({
               {value.map((participant, index) => {
                 const error = errors.participants?.[index]?.name
                 return (
-                  <FormGroup key={participant.id}>
+                  <FormGroup key={index}>
                     <TextInput
                       value={participant.name}
                       onBlur={onBlur}
