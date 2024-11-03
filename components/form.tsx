@@ -25,8 +25,13 @@ export function FormSection({ children }: PropsWithChildren) {
   )
 }
 
-export function FormSectionTitle({ children }: PropsWithChildren) {
-  return <Text className="text-lg font-bold px-4 mb-2 mt-4">{children}</Text>
+export function FormSectionTitle({ className, ...props }: TextProps) {
+  return (
+    <Text
+      className={cn('text-lg font-bold px-4 mb-2 mt-4', className)}
+      {...props}
+    />
+  )
 }
 
 export function FormGroup({ className, ...props }: ViewProps) {

@@ -31,6 +31,7 @@ export default function GroupSettingsScreen() {
             {data && (
               <GroupForm
                 groupDetails={data.group}
+                participantWithExpenses={data.participantsWithExpenses}
                 onSave={async (groupFormValues) => {
                   await mutateAsync({
                     groupId,

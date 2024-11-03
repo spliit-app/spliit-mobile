@@ -1,5 +1,5 @@
-import { Text, View, Pressable } from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
+import { Text, View, Pressable, Alert } from 'react-native'
+import { useForm, Controller, useFieldArray } from 'react-hook-form'
 import { useRouter } from 'expo-router'
 import { GroupDetails, trpc } from '@/utils/trpc'
 import { GroupFormValues, groupFormSchema } from 'spliit-api/src/lib/schemas'
@@ -13,13 +13,18 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
+import { FontAwesome, FontAwesome6 } from '@expo/vector-icons'
+import { BRAND_COLOR } from '@/utils/colors'
+import { cn } from '@/utils/cn'
 
 export function GroupForm({
   groupDetails,
   onSave,
+  participantWithExpenses = [],
 }: {
   groupDetails: GroupDetails | null
   onSave: (groupFormValues: GroupFormValues) => Promise<void>
+  participantWithExpenses?: string[]
 }) {
   const {
     control,
@@ -40,6 +45,12 @@ export function GroupForm({
           participants: [{ name: 'John' }, { name: 'Jane' }, { name: 'Jack' }],
         },
     resolver: zodResolver(groupFormSchema),
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'participants',
+    keyName: 'key',
   })
 
   return (
@@ -110,37 +121,66 @@ export function GroupForm({
         )}
       </FormSection>
 
-      <FormSectionTitle>Participants</FormSectionTitle>
+      <View className="flex-row justify-between">
+        <FormSectionTitle className="flex-1">Participants</FormSectionTitle>
+        <Pressable
+          onPress={() => {
+            append({ name: 'New' })
+          }}
+          className="px-4 py-2 flex-shrink-0 justify-end"
+        >
+          <FontAwesome6 name="plus" color={BRAND_COLOR} size={20} />
+        </Pressable>
+      </View>
       <FormSection>
         <HelpText>Enter the name for each participant.</HelpText>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              {value.map((participant, index) => {
-                const error = errors.participants?.[index]?.name
-                return (
-                  <FormGroup key={index}>
+        {fields.map((item, index) => (
+          <Controller
+            key={item.key}
+            control={control}
+            name={`participants.${index}.name`}
+            render={({
+              field: { value, onChange, onBlur },
+              fieldState: { error },
+            }) => {
+              const isDisabled = item.id
+                ? participantWithExpenses.includes(item.id)
+                : false
+              return (
+                <FormGroup>
+                  <View className="flex-row">
                     <TextInput
-                      value={participant.name}
+                      className="flex-1"
+                      value={value}
                       onBlur={onBlur}
-                      onChangeText={(name) => {
-                        onChange(
-                          value.map((p) =>
-                            p === participant ? { ...p, name } : p
-                          )
-                        )
-                      }}
+                      onChangeText={onChange}
                       hasError={!!error}
                     />
-                    {error && <ErrorMessage>{error.message}</ErrorMessage>}
-                  </FormGroup>
-                )
-              })}
-            </>
-          )}
-          name="participants"
-        />
+                    <Pressable
+                      onPress={() => {
+                        if (isDisabled) {
+                          Alert.alert(
+                            'Partitipant with expenses',
+                            'You can not remove this participant because they have expenses.'
+                          )
+                        } else {
+                          remove(index)
+                        }
+                      }}
+                      className={cn(
+                        'px-2 -mr-2 justify-center',
+                        isDisabled && 'opacity-20'
+                      )}
+                    >
+                      <FontAwesome name="trash-o" size={20} color="red" />
+                    </Pressable>
+                  </View>
+                  {error && <ErrorMessage>{error.message}</ErrorMessage>}
+                </FormGroup>
+              )
+            }}
+          />
+        ))}
       </FormSection>
 
       <View className="flex-row mt-2 mb-10 px-4">
