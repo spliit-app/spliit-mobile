@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Expense, trpc } from '@/utils/trpc'
 import { FontAwesome6 } from '@expo/vector-icons'
@@ -108,7 +109,9 @@ function ExpenseList({
                   }
                 >
                   <View className="gap-1 flex-1">
-                    <Text>{expense.title}</Text>
+                    <Text className={cn(expense.isReimbursement && 'italic')}>
+                      {expense.title}
+                    </Text>
                     <Text className="text-xs text-slate-600">
                       Paid by{' '}
                       <Text className="font-bold">{expense.paidBy.name}</Text>{' '}

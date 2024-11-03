@@ -1,7 +1,13 @@
 import { formatCurrency } from '@/utils/formatCurrency'
 import { trpc } from '@/utils/trpc'
-import { useGlobalSearchParams } from 'expo-router'
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
+import { router, useGlobalSearchParams } from 'expo-router'
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native'
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context'
 import { AppRouterOutput } from 'spliit-api'
 
@@ -142,16 +148,39 @@ function Balances({
               return (
                 <View
                   key={index}
-                  className="flex-row justify-between rounded-md mx-4 mb-2 p-4 bg-slate-100"
+                  className="rounded-md mx-4 mb-2 p-4 bg-slate-100"
                 >
-                  <Text>
-                    <Text className="font-bold">{participantFrom.name}</Text>
-                    <Text> owes </Text>
-                    <Text className="font-bold">{participantTo.name}</Text>
-                  </Text>
-                  <Text className="font-bold">
-                    {formatCurrency(group.currency, reimbursement.amount / 100)}
-                  </Text>
+                  <View className="flex-row justify-between ">
+                    <Text>
+                      <Text className="font-bold">{participantFrom.name}</Text>
+                      <Text> owes </Text>
+                      <Text className="font-bold">{participantTo.name}</Text>
+                    </Text>
+                    <Text className="font-bold">
+                      {formatCurrency(
+                        group.currency,
+                        reimbursement.amount / 100
+                      )}
+                    </Text>
+                  </View>
+                  <Pressable
+                    className="-ml-2 -mb-2 p-2"
+                    onPress={() => {
+                      router.push({
+                        pathname: '/(tabs)/[groupId]/create-expense',
+                        params: {
+                          groupId: group.id,
+                          isReimbursement: 'yes',
+                          paidBy: participantFrom.id,
+                          paidFor: participantTo.id,
+                          title: 'Reimbursement',
+                          amount: String(reimbursement.amount),
+                        },
+                      })
+                    }}
+                  >
+                    <Text className="text-emerald-600">Mark as paid</Text>
+                  </Pressable>
                 </View>
               )
             })}

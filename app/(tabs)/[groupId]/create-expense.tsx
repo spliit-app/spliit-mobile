@@ -1,5 +1,10 @@
 import { trpc } from '@/utils/trpc'
-import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
+import {
+  Stack,
+  useGlobalSearchParams,
+  useLocalSearchParams,
+  useRouter,
+} from 'expo-router'
 import { Button } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
@@ -11,6 +16,8 @@ export default function ExpenseScreen() {
   const { groupId } = useGlobalSearchParams<{
     groupId: string
   }>()
+
+  const params = useLocalSearchParams()
 
   const { data: groupData } = trpc.groups.get.useQuery({ groupId })
 
@@ -37,6 +44,16 @@ export default function ExpenseScreen() {
             {groupData?.group && (
               <ExpenseForm
                 expense={null}
+                reimbursementParams={
+                  params.isReimbursement
+                    ? {
+                        title: params.title as string,
+                        paidBy: params.paidBy as string,
+                        paidFor: params.paidFor as string,
+                        amount: Number(params.amount),
+                      }
+                    : undefined
+                }
                 group={groupData.group}
                 onSave={async (expenseFormValues) => {
                   await mutateAsync({ groupId, expenseFormValues })

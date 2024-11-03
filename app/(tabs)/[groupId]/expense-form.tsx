@@ -27,9 +27,16 @@ import { BRAND_COLOR } from '@/utils/colors'
 export function ExpenseForm({
   expense,
   group,
+  reimbursementParams,
   onSave,
 }: {
   expense: ExpenseDetails | null
+  reimbursementParams?: {
+    title: string
+    paidBy: string
+    paidFor: string
+    amount: number
+  }
   group: Group
   onSave: (expenseFormValues: ExpenseFormValues) => Promise<void>
 }) {
@@ -57,6 +64,20 @@ export function ExpenseForm({
           isReimbursement: expense.isReimbursement,
           documents: expense.documents,
           notes: expense.notes ?? '',
+        }
+      : reimbursementParams
+      ? {
+          title: reimbursementParams.title,
+          expenseDate: new Date(),
+          amount: String(reimbursementParams.amount / 100) as unknown as number, // hack,
+          category: 1,
+          paidBy: reimbursementParams.paidBy,
+          paidFor: [{ participant: reimbursementParams.paidFor, shares: 1 }],
+          splitMode: 'EVENLY',
+          saveDefaultSplittingOptions: false,
+          isReimbursement: true,
+          documents: [],
+          notes: '',
         }
       : {
           title: '',
