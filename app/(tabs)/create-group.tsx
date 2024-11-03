@@ -5,6 +5,7 @@ import { BRAND_COLOR } from '@/utils/colors'
 import { GroupForm } from './group-form'
 import { trpc } from '@/utils/trpc'
 import { addRecentGroup } from '@/utils/recentGroups'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 export default function CreateGroupScreen() {
   const router = useRouter()
@@ -26,7 +27,7 @@ export default function CreateGroupScreen() {
       />
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} className="flex-1 bg-white">
-          <ScrollView className="flex-1">
+          <KeyboardAwareScrollView bottomOffset={20}>
             <GroupForm
               groupDetails={null}
               onSave={async (groupFormValues) => {
@@ -39,7 +40,7 @@ export default function CreateGroupScreen() {
                 router.back()
               }}
             />
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
       </SafeAreaProvider>
     </>

@@ -4,6 +4,7 @@ import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { trpc } from '@/utils/trpc'
 import { BRAND_COLOR } from '@/utils/colors'
 import { GroupForm } from '../group-form'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()
@@ -27,7 +28,7 @@ export default function GroupSettingsScreen() {
       />
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} className="flex-1 bg-white">
-          <ScrollView className="flex-1">
+          <KeyboardAwareScrollView bottomOffset={20}>
             {data && (
               <GroupForm
                 groupDetails={data.group}
@@ -42,7 +43,7 @@ export default function GroupSettingsScreen() {
                 }}
               />
             )}
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
       </SafeAreaProvider>
     </>
