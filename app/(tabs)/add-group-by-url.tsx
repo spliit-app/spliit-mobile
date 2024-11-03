@@ -1,9 +1,17 @@
+import {
+  ErrorMessage,
+  FormGroup,
+  FormSection,
+  HelpText,
+  Label,
+  TextInput,
+} from '@/components/form'
 import { BRAND_COLOR } from '@/utils/colors'
 import { addRecentGroup } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
 import { Stack, useRouter } from 'expo-router'
 import { useState } from 'react'
-import { Button, Pressable, Text, TextInput, View } from 'react-native'
+import { Button, Pressable, Text, View } from 'react-native'
 
 export default function AddGroupByUrlModal() {
   const [url, setUrl] = useState('')
@@ -26,30 +34,30 @@ export default function AddGroupByUrlModal() {
           ),
         }}
       />
-      <View className="p-4 bg-white h-full">
-        <Text className="mb-2">
-          If a group was shared with you, you can paste its URL here to add it
-          to your list.
-        </Text>
-        <TextInput
-          className={
-            'border border-gray-300 rounded p-2 mb-2 ' +
-            (hasError ? 'border-red-600' : '')
-          }
-          keyboardType="url"
-          autoComplete="url"
-          autoCorrect={false}
-          autoCapitalize="none"
-          placeholder="https://spliit.app/..."
-          value={url}
-          onChangeText={(text) => setUrl(text)}
-        />
-        {hasError && (
-          <Text className="-mt-1 mb-2 text-sm text-red-600">
-            The URL is not a valid group URL.
-          </Text>
-        )}
-        <View className="flex-row justify-end gap-2">
+      <View className="pt-4 bg-white h-full">
+        <FormSection>
+          <FormGroup>
+            <Label>Group URL</Label>
+            <TextInput
+              hasError={hasError}
+              keyboardType="url"
+              autoComplete="url"
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholder="https://spliit.app/..."
+              value={url}
+              onChangeText={(text) => setUrl(text)}
+            />
+            {hasError && (
+              <ErrorMessage>The URL is not a valid group URL.</ErrorMessage>
+            )}
+            <HelpText>
+              If a group was shared with you, you can paste its URL here to add
+              it to your list.
+            </HelpText>
+          </FormGroup>
+        </FormSection>
+        <View className="flex-row mt-2 mb-10 px-4">
           <Pressable
             disabled={isPending}
             onPress={async () => {
@@ -71,7 +79,7 @@ export default function AddGroupByUrlModal() {
               }
               setIsPending(false)
             }}
-            className="px-4 py-2 rounded bg-emerald-700"
+            className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
           >
             <Text className="text-white text-lg font-semibold">
               {isPending ? 'Adding…' : 'Add'}
