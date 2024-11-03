@@ -12,17 +12,24 @@ import {
   useRouter,
 } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { Platform, Pressable, SectionList, Text, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  SectionList,
+  Text,
+  View,
+} from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { MenuView } from '@react-native-menu/menu'
 import { match } from 'ts-pattern'
 import { FontAwesome6 } from '@expo/vector-icons'
 
 export default function GroupsScreen() {
-  const [recentGroups, setRecentGroups] = useState<RecentGroup[]>([])
+  const [recentGroups, setRecentGroups] = useState<RecentGroup[] | null>(null)
 
-  const { data, isLoading, refetch } = trpc.groups.list.useQuery({
-    groupIds: recentGroups.map(({ groupId }) => groupId),
+  const { data, refetch } = trpc.groups.list.useQuery({
+    groupIds: recentGroups?.map(({ groupId }) => groupId) ?? [],
   })
 
   const fetchGroups = useCallback(() => {
@@ -43,14 +50,19 @@ export default function GroupsScreen() {
   const sections = [
     {
       title: 'Recent Groups',
-      data: recentGroups,
+      data: recentGroups ?? [],
     },
   ]
 
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-white">
-        {recentGroups.length === 0 ? (
+        {recentGroups === null ? (
+          <View className="h-full flex-col justify-center items-center gap-4">
+            <ActivityIndicator size="large" />
+            <Text className="text-slate-700">Loading recent groups</Text>
+          </View>
+        ) : recentGroups.length === 0 ? (
           <View className="h-full flex-col items-center justify-center">
             <Text className="text-xl font-semibold">Welcome to Spliit!</Text>
             <Text className="text-lg">

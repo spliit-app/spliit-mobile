@@ -15,7 +15,7 @@ export default function GroupLayout() {
           headerLeft: () => (
             <Pressable
               className="flex-row items-center gap-2 py-2 pr-2"
-              onPress={() => router.back()}
+              onPress={() => router.dismiss()}
             >
               <FontAwesome6 size={20} color="#059669" name="chevron-left" />
             </Pressable>

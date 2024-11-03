@@ -129,7 +129,7 @@ export function GroupForm({
           }}
           className="px-4 py-2 flex-shrink-0 justify-end"
         >
-          <FontAwesome6 name="plus" color={BRAND_COLOR} size={20} />
+          <Text className="text-lg text-emerald-600">Add</Text>
         </Pressable>
       </View>
       <FormSection>

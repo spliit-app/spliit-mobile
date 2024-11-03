@@ -6,6 +6,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Fragment } from 'react'
 import {
+  ActivityIndicator,
   Platform,
   Pressable,
   SafeAreaView,
@@ -34,7 +35,7 @@ function ExpenseList({
   group: NonNullable<AppRouterOutput['groups']['get']['group']>
 }) {
   const router = useRouter()
-  const { data, fetchNextPage, refetch } =
+  const { data, fetchNextPage, refetch, isInitialLoading } =
     trpc.groups.expenses.list.useInfiniteQuery(
       { groupId: group.id, limit: PAGE_SIZE },
       { getNextPageParam: ({ nextCursor }) => nextCursor }
@@ -64,7 +65,12 @@ function ExpenseList({
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-white">
-        {sections.length === 1 ? (
+        {isInitialLoading ? (
+          <View className="h-full flex-col justify-center items-center gap-4">
+            <ActivityIndicator size="large" />
+            <Text className="text-slate-700">Loading group expensees</Text>
+          </View>
+        ) : sections.length === 1 ? (
           <View className="h-full items-center justify-center">
             <Text className="mb-2 font-bold text-lg text-slate-950">
               Your group is ready!
