@@ -1,10 +1,15 @@
 {
   "expo": {
-    "name": "spliit-mobile",
+    "name": "Spliit",
     "slug": "spliit-mobile",
     "scheme": "app.spliit.spliitmobile",
     "version": "1.0.0",
     "newArchEnabled": true,
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "backgroundColor": "#FFFFFF"
+    },
     "experiments": {
       "typedRoutes": true
     },
@@ -12,9 +17,6 @@
       "eas": {
         "projectId": "21de7c0f-2085-481d-a2a9-73cfe879d271"
       }
-    },
-    "android": {
-      "package": "app.spliit.spliitmobile"
     },
     "ios": {
       "bundleIdentifier": "app.spliit.spliitmobile"
