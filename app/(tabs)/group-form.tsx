@@ -110,7 +110,7 @@ export function GroupForm({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value ?? ''}
-                hasError={!!errors.name}
+                hasError={!!errors.information}
               />
             )}
             name="information"
@@ -181,6 +181,9 @@ export function GroupForm({
             }}
           />
         ))}
+        {errors.participants?.message && (
+          <ErrorMessage>{errors.participants.message}</ErrorMessage>
+        )}
       </FormSection>
 
       <View className="flex-row mt-2 mb-10 px-4">

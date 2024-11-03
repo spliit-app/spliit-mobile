@@ -1,5 +1,6 @@
 import { cn } from '@/utils/cn'
 import { Category, Group, GroupParticipant, trpc } from '@/utils/trpc'
+import { errorMessages } from '@/utils/validation'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { PropsWithChildren, useState } from 'react'
 import {
@@ -47,7 +48,13 @@ export function HelpText({ className, ...props }: TextProps) {
 }
 
 export function ErrorMessage({ children }: PropsWithChildren) {
-  return <Text className="text-red-600 text-sm">{children}</Text>
+  return (
+    <Text className="text-red-600 text-sm">
+      {typeof children === 'string' && children in errorMessages
+        ? errorMessages[children]
+        : children}
+    </Text>
+  )
 }
 
 export function TextInput({
