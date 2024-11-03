@@ -3,8 +3,8 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { trpc } from '@/utils/trpc'
 import { BRAND_COLOR } from '@/utils/colors'
-import { GroupForm } from '../group-form'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { GroupForm } from '@/components/group-form'
 
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()

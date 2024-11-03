@@ -8,8 +8,8 @@ import {
 import { Button } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import { ExpenseForm } from './expense-form'
 import { BRAND_COLOR } from '@/utils/colors'
+import { ExpenseForm } from '@/components/expense-form'
 
 export default function ExpenseScreen() {
   const router = useRouter()

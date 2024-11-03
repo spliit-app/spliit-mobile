@@ -2,10 +2,10 @@ import { ScrollView, Button } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Stack, useRouter } from 'expo-router'
 import { BRAND_COLOR } from '@/utils/colors'
-import { GroupForm } from './group-form'
 import { trpc } from '@/utils/trpc'
 import { addRecentGroup } from '@/utils/recentGroups'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { GroupForm } from '@/components/group-form'
 
 export default function CreateGroupScreen() {
   const router = useRouter()
