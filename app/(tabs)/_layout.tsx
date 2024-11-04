@@ -16,6 +16,10 @@ export default function TabLayout() {
         name="create-group"
         options={{ presentation: 'modal', title: 'Create group' }}
       />
+      <Stack.Screen
+        name="about"
+        options={{ presentation: 'modal', title: 'About' }}
+      />
     </Stack>
   )
 }

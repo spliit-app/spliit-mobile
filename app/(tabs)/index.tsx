@@ -23,8 +23,9 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { MenuView } from '@react-native-menu/menu'
 import { match } from 'ts-pattern'
-import { FontAwesome6 } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Image } from 'expo-image'
+import { BRAND_COLOR } from '@/utils/colors'
 
 export default function GroupsScreen() {
   const [recentGroups, setRecentGroups] = useState<RecentGroup[] | null>(null)
@@ -198,13 +199,16 @@ export default function GroupsScreen() {
             }}
             renderSectionHeader={({ section: { title } }) =>
               title === 'HEADER' ? (
-                <View className="p-4">
+                <View className="p-4 flex-row justify-between">
                   <Image
                     source={require('../../assets/images/logo-with-text.png')}
                     contentFit="contain"
                     contentPosition="left top"
-                    style={{ height: 48 }}
+                    style={{ height: 48, flex: 1 }}
                   />
+                  <Pressable onPress={() => router.push('/about')} className="">
+                    <FontAwesome5 name="cog" color={BRAND_COLOR} size={20} />
+                  </Pressable>
                 </View>
               ) : (
                 <View className="px-4 py-2 mt-2 flex-row justify-between items-baseline">

@@ -1,3 +1,4 @@
+import { BRAND_COLOR } from '@/utils/colors'
 import { trpc } from '@/utils/trpc'
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
@@ -29,7 +30,7 @@ export default function GroupLayout() {
                 })
               }
             >
-              <FontAwesome5 name="cog" size={20} color="#059669" />
+              <FontAwesome5 name="cog" size={20} color={BRAND_COLOR} />
             </Pressable>
           ),
         }}
