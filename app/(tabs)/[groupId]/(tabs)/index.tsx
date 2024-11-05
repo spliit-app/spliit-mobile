@@ -166,6 +166,10 @@ function ExpenseList({
                     {
                       id: 'open',
                       title: 'Edit expense',
+
+                      image: Platform.select({
+                        ios: 'pencil',
+                      }),
                     },
                     {
                       id: 'delete',
