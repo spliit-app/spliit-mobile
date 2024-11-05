@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Group } from './trpc'
 
 const recentGroupsSchema = z.array(
   z.object({
@@ -24,6 +25,22 @@ export async function addRecentGroup(recentGroup: RecentGroup) {
   const updatedRecentGroups = [
     recentGroup,
     ...recentGroups.filter((group) => group.groupId !== recentGroup.groupId),
+  ]
+  try {
+    await AsyncStorage.setItem(
+      'recent-groups',
+      JSON.stringify(updatedRecentGroups)
+    )
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export async function updateRecentGroup(group: Group) {
+  const recentGroups = await getRecentGroups()
+  const updatedRecentGroups = [
+    { groupId: group.id, groupName: group.name },
+    ...recentGroups.filter((g) => g.groupId !== group.id),
   ]
   try {
     await AsyncStorage.setItem(

@@ -1,11 +1,12 @@
 import { cn } from '@/utils/cn'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { updateRecentGroup } from '@/utils/recentGroups'
 import { Expense, trpc } from '@/utils/trpc'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { MenuView } from '@react-native-menu/menu'
 import dayjs, { Dayjs } from 'dayjs'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import {
   ActivityIndicator,
   Platform,
@@ -22,6 +23,12 @@ import { match } from 'ts-pattern'
 export default function GroupScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>()
   const { data } = trpc.groups.get.useQuery({ groupId })
+
+  useEffect(() => {
+    if (data?.group) {
+      updateRecentGroup(data.group)
+    }
+  }, [data])
 
   if (!data?.group) return null
 
