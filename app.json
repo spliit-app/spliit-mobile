@@ -7,7 +7,7 @@
     "newArchEnabled": true,
     "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash-light@3x.png",
       "backgroundColor": "#FFFFFF"
     },
     "experiments": {
