@@ -175,7 +175,10 @@ export function ExpenseForm({
                   color={BRAND_COLOR}
                   style={{ width: 16, height: 16 }}
                 />
-                <Pressable onPress={() => onChange(!value)}>
+                <Pressable
+                  onPress={() => onChange(!value)}
+                  className="active:opacity-60"
+                >
                   <Label className="font-normal">This is a reimbursement</Label>
                 </Pressable>
               </View>
@@ -337,7 +340,7 @@ export function ExpenseForm({
                         }
                       />
                       <Pressable
-                        className="flex-1 self-stretch justify-center"
+                        className="flex-1 self-stretch justify-center active:opacity-60"
                         onPress={() =>
                           paidFor
                             ? removePaidFor(participant.id)
@@ -426,7 +429,7 @@ export function ExpenseForm({
           })}
           className={cn(
             bgBrand,
-            'flex-1 flex-row justify-center rounded-lg px-4 py-2'
+            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
           )}
         >
           <Text className="text-white text-lg font-semibold">

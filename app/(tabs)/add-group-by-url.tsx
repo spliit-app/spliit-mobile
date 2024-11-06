@@ -82,7 +82,7 @@ export default function AddGroupByUrlModal() {
             }}
             className={cn(
               bgBrand,
-              'flex-1 flex-row justify-center rounded-lg px-4 py-2'
+              'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
             )}
           >
             <Text className="text-white text-lg font-semibold">

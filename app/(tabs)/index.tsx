@@ -83,7 +83,7 @@ export default function GroupsScreen() {
             <Pressable
               className={cn(
                 bgBrand,
-                'flex-row justify-center rounded-lg px-4 py-2 mt-4'
+                'flex-row justify-center rounded-lg px-4 py-2 mt-4 active:opacity-60'
               )}
               onPress={() =>
                 router.push({
@@ -100,7 +100,7 @@ export default function GroupsScreen() {
               Do you want to add an existing group here?
             </Text>
             <Pressable
-              className="flex-row justify-center rounded-lg px-4 py-2"
+              className="flex-row justify-center rounded-lg px-4 py-2 active:opacity-60"
               onPress={() =>
                 router.push({
                   pathname: '/(tabs)/add-group-by-url',
@@ -129,7 +129,7 @@ export default function GroupsScreen() {
                     }}
                     asChild
                   >
-                    <Pressable className="flex-1 p-4 gap-1">
+                    <Pressable className="flex-1 p-4 gap-1 active:opacity-60">
                       <Text className="font-semibold">
                         {recentGroup.groupName}
                       </Text>
@@ -210,7 +210,10 @@ export default function GroupsScreen() {
                     contentPosition="left top"
                     style={{ height: 48, flex: 1 }}
                   />
-                  <Pressable onPress={() => router.push('/about')} className="">
+                  <Pressable
+                    onPress={() => router.push('/about')}
+                    className="active:opacity-60"
+                  >
                     <FontAwesome5 name="cog" color={BRAND_COLOR} size={20} />
                   </Pressable>
                 </View>

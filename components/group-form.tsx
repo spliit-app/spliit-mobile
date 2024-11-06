@@ -127,7 +127,7 @@ export function GroupForm({
           onPress={() => {
             append({ name: 'New' })
           }}
-          className="px-4 py-2 flex-shrink-0 justify-end"
+          className="px-4 py-2 flex-shrink-0 justify-end active:opacity-60"
         >
           <Text className={cn(textBrand, 'text-lg')}>Add</Text>
         </Pressable>
@@ -168,7 +168,7 @@ export function GroupForm({
                         }
                       }}
                       className={cn(
-                        'px-2 -mr-2 justify-center',
+                        'px-2 -mr-2 justify-center active:opacity-60',
                         isDisabled && 'opacity-20'
                       )}
                     >
@@ -195,7 +195,7 @@ export function GroupForm({
           })}
           className={cn(
             bgBrand,
-            'flex-1 flex-row justify-center rounded-lg px-4 py-2'
+            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
           )}
         >
           <Text className="text-white text-lg font-semibold">

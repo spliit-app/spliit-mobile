@@ -41,7 +41,7 @@ export default function AboutScreen() {
               <Pressable
                 className={cn(
                   bgBrand,
-                  'py-2 px-3 rounded-lg flex-row items-center gap-3'
+                  'py-2 px-3 rounded-lg flex-row items-center gap-3 active:opacity-60'
                 )}
                 onPress={() =>
                   Linking.openURL('https://spliit.app/?ref=mobile-app')
@@ -57,7 +57,7 @@ export default function AboutScreen() {
                 </Text>
               </Pressable>
               <Pressable
-                className="bg-slate-100 py-2 px-3 rounded-lg flex-row items-center gap-3"
+                className="bg-slate-100 py-2 px-3 rounded-lg flex-row items-center gap-3 active:opacity-60"
                 onPress={() => Linking.openURL('https://github.com/spliit-app')}
               >
                 <FontAwesome6 name="github" size={16} />

@@ -165,7 +165,7 @@ function Balances({
                     </Text>
                   </View>
                   <Pressable
-                    className="-ml-2 -mb-2 p-2"
+                    className="-ml-2 -mb-2 p-2 active:opacity-60"
                     onPress={() => {
                       router.push({
                         pathname: '/(tabs)/[groupId]/create-expense',

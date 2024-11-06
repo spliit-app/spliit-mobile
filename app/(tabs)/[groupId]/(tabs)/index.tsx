@@ -90,7 +90,7 @@ function ExpenseList({
             <Pressable
               className={cn(
                 textBrand,
-                'flex-row justify-center rounded-lg px-4 py-2'
+                'flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
               )}
               onPress={() =>
                 router.push({
@@ -111,7 +111,7 @@ function ExpenseList({
             renderItem={({ item: expense }) => (
               <View className="bg-slate-100 rounded-md mb-2 mx-4 flex-row">
                 <Pressable
-                  className="py-4 pl-4 flex-row flex-1"
+                  className="py-4 pl-4 flex-row flex-1 active:opacity-60"
                   onPress={() =>
                     router.push({
                       pathname: '/(tabs)/[groupId]/expenses/[expenseId]',
@@ -201,6 +201,7 @@ function ExpenseList({
                 <View className="px-4 pt-4 mt-2 bg-white flex-row justify-between items-baseline">
                   <Text className="font-bold text-lg">Expenses</Text>
                   <Pressable
+                    className="active:opacity-60"
                     onPress={() =>
                       router.push({
                         pathname: '/[groupId]/create-expense',

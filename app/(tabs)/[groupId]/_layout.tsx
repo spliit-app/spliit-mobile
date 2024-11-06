@@ -1,9 +1,9 @@
 import { BRAND_COLOR } from '@/utils/colors'
 import { trpc } from '@/utils/trpc'
-import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
+import { FontAwesome6 } from '@expo/vector-icons'
 import { MenuView } from '@react-native-menu/menu'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { Platform, Pressable, Share, Text, View } from 'react-native'
+import { Platform, Pressable, Share, View } from 'react-native'
 import { match } from 'ts-pattern'
 
 export default function GroupLayout() {
@@ -17,7 +17,7 @@ export default function GroupLayout() {
           title: data?.group?.name ?? '…',
           headerLeft: () => (
             <Pressable
-              className="flex-row items-center gap-2 py-2 pr-2"
+              className="flex-row items-center gap-2 py-2 pr-2 active:opacity-60"
               onPress={() => router.dismiss()}
             >
               <FontAwesome6 size={20} color="#059669" name="chevron-left" />

@@ -16,7 +16,6 @@ import {
   TextProps,
   ViewProps,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import DateTimePicker from 'react-native-ui-datepicker'
 
 export function FormSection({ children }: PropsWithChildren) {
@@ -92,7 +91,7 @@ export function CategoryInput({
     <>
       <Pressable
         className={cn(
-          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center',
+          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
           hasError && 'border-red-500'
         )}
         onPress={() => {
@@ -145,7 +144,7 @@ export function ParticipantInput({
     <>
       <Pressable
         className={cn(
-          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center',
+          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
           hasError && 'border-red-500'
         )}
         onPress={() => {
@@ -197,7 +196,7 @@ export function DateInput({
     <>
       <Pressable
         className={cn(
-          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center',
+          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
           hasError && 'border-red-500'
         )}
         onPress={() => {
@@ -260,7 +259,7 @@ function ParticipantInputModalContent({
             renderItem={({ item, index }) => (
               <Pressable
                 className={cn(
-                  'py-3 border-gray-200 ml-4 pr-4 flex-row',
+                  'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
                   index > 0 && 'border-t'
                 )}
                 onPress={() => setParticipant(item)}
@@ -282,13 +281,13 @@ function ParticipantInputModalContent({
         </View>
         <View className="flex-row gap-4 justify-end border-t border-gray-200 p-2">
           <Pressable
-            className="px-4 py-2 rounded-lg"
+            className="px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => onCancel()}
           >
             <Text className="text-lg font-semibold">Close</Text>
           </Pressable>
           <Pressable
-            className={`${bgBrand} px-4 py-2 rounded-lg`}
+            className={cn(bgBrand, 'px-4 py-2 rounded-lg active:opacity-60')}
             onPress={() => participant && onSubmit(participant)}
           >
             <Text className="text-white text-lg font-semibold">Save</Text>
@@ -338,7 +337,7 @@ function CategoryInputModalContent({
             renderItem={({ item, index }) => (
               <Pressable
                 className={cn(
-                  'py-3 border-gray-200 ml-4 pr-4 flex-row',
+                  'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
                   index > 0 && 'border-t'
                 )}
                 onPress={() => setCategory(item)}
@@ -365,13 +364,13 @@ function CategoryInputModalContent({
         </View>
         <View className="flex-row gap-4 justify-end border-t border-gray-200 p-2">
           <Pressable
-            className="px-4 py-2 rounded-lg"
+            className="px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => onCancel()}
           >
             <Text className="text-lg font-semibold">Close</Text>
           </Pressable>
           <Pressable
-            className={`${bgBrand} px-4 py-2 rounded-lg`}
+            className={cn(bgBrand, 'px-4 py-2 rounded-lg active:opacity-60')}
             onPress={() => category && onSubmit(category)}
           >
             <Text className="text-white text-lg font-semibold">Save</Text>
@@ -409,13 +408,13 @@ function DateInputModalContent({
         />
         <View className="flex-row gap-4 justify-end">
           <Pressable
-            className="px-4 py-2 rounded-lg"
+            className="px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => onCancel()}
           >
             <Text className="text-lg font-semibold">Close</Text>
           </Pressable>
           <Pressable
-            className={cn(bgBrand, 'px-4 py-2 rounded-lg')}
+            className={cn(bgBrand, 'px-4 py-2 rounded-lg active:opacity-60')}
             onPress={() => onSubmit(date)}
           >
             <Text className="text-white text-lg font-semibold">Save</Text>
