@@ -116,7 +116,7 @@ export function AmountInput({
           currency,
         })
         if (!Number.isNaN(valueAsNumber)) {
-          onChangeValue?.(valueAsNumber)
+          onChangeValue?.(valueAsNumber * 100)
         }
       }}
       onBlur={(event) => {

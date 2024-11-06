@@ -299,7 +299,7 @@ export function ExpenseForm({
                           ? {
                               ...p,
                               shares: enforceCurrencyPattern(
-                                String(shares ?? 0)
+                                String((shares ?? 0) / 100)
                               ),
                             }
                           : p
