@@ -1,3 +1,4 @@
+import { BRAND_COLOR } from '@/utils/colors'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 
@@ -10,6 +11,7 @@ export default function TabLayout() {
           options={{
             title: 'Expenses',
             headerShown: false,
+            tabBarActiveTintColor: BRAND_COLOR,
             tabBarIcon: ({ color }) => (
               <FontAwesome6 name="list" size={28} color={color} />
             ),
@@ -20,6 +22,7 @@ export default function TabLayout() {
           options={{
             title: 'Balances',
             headerShown: false,
+            tabBarActiveTintColor: BRAND_COLOR,
             tabBarIcon: ({ color }) => (
               <FontAwesome6
                 name="money-bill-transfer"

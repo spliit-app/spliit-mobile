@@ -1,3 +1,4 @@
+import { textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { trpc } from '@/utils/trpc'
 import { router, useGlobalSearchParams } from 'expo-router'
@@ -179,7 +180,7 @@ function Balances({
                       })
                     }}
                   >
-                    <Text className="text-emerald-600">Mark as paid</Text>
+                    <Text className={textBrand}>Mark as paid</Text>
                   </Pressable>
                 </View>
               )

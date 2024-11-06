@@ -66,16 +66,6 @@ export default function GroupLayout() {
                 <FontAwesome6 name="ellipsis" size={14} color={BRAND_COLOR} />
               </View>
             </MenuView>
-            // <Pressable
-            //   onPress={() =>
-            //     router.push({
-            //       pathname: '/[groupId]/settings',
-            //       params: { groupId },
-            //     })
-            //   }
-            // >
-            //   <FontAwesome5 name="cog" size={20} color={BRAND_COLOR} />
-            // </Pressable>
           ),
         }}
       />

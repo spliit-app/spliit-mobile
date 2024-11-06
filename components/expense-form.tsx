@@ -22,7 +22,8 @@ import CurrencyInput from 'react-native-currency-input'
 import Checkbox from 'expo-checkbox'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { match } from 'ts-pattern'
-import { BRAND_COLOR } from '@/utils/colors'
+import { BRAND_COLOR, bgBrand } from '@/utils/colors'
+import { cn } from '@/utils/cn'
 
 export function ExpenseForm({
   expense,
@@ -423,7 +424,10 @@ export function ExpenseForm({
           onPress={handleSubmit(async (values) => {
             await onSave(values)
           })}
-          className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
+          className={cn(
+            bgBrand,
+            'flex-1 flex-row justify-center rounded-lg px-4 py-2'
+          )}
         >
           <Text className="text-white text-lg font-semibold">
             {isSubmitting ? 'Saving…' : 'Save'}

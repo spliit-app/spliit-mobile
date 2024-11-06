@@ -1,4 +1,4 @@
-import { BRAND_COLOR } from '@/utils/colors'
+import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Stack, useRouter } from 'expo-router'
 import {
@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import DeviceInfo from 'react-native-device-info'
+import { cn } from '@/utils/cn'
 
 export default function AboutScreen() {
   const router = useRouter()
@@ -38,7 +39,10 @@ export default function AboutScreen() {
             </Text>
             <View className="flex-row mt-6 justify-center gap-4">
               <Pressable
-                className="bg-emerald-600 py-2 px-3 rounded-lg flex-row items-center gap-3"
+                className={cn(
+                  bgBrand,
+                  'py-2 px-3 rounded-lg flex-row items-center gap-3'
+                )}
                 onPress={() =>
                   Linking.openURL('https://spliit.app/?ref=mobile-app')
                 }

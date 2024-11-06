@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn'
+import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { Category, Group, GroupParticipant, trpc } from '@/utils/trpc'
 import { errorMessages } from '@/utils/validation'
 import { FontAwesome6 } from '@expo/vector-icons'
@@ -287,7 +288,7 @@ function ParticipantInputModalContent({
             <Text className="text-lg font-semibold">Close</Text>
           </Pressable>
           <Pressable
-            className="bg-emerald-600 px-4 py-2 rounded-lg"
+            className={`${bgBrand} px-4 py-2 rounded-lg`}
             onPress={() => participant && onSubmit(participant)}
           >
             <Text className="text-white text-lg font-semibold">Save</Text>
@@ -370,7 +371,7 @@ function CategoryInputModalContent({
             <Text className="text-lg font-semibold">Close</Text>
           </Pressable>
           <Pressable
-            className="bg-emerald-600 px-4 py-2 rounded-lg"
+            className={`${bgBrand} px-4 py-2 rounded-lg`}
             onPress={() => category && onSubmit(category)}
           >
             <Text className="text-white text-lg font-semibold">Save</Text>
@@ -404,6 +405,7 @@ function DateInputModalContent({
             if (date) setDate(new Date(date?.valueOf()))
           }}
           date={date}
+          selectedItemColor={BRAND_COLOR}
         />
         <View className="flex-row gap-4 justify-end">
           <Pressable
@@ -413,7 +415,7 @@ function DateInputModalContent({
             <Text className="text-lg font-semibold">Close</Text>
           </Pressable>
           <Pressable
-            className="bg-emerald-600 px-4 py-2 rounded-lg"
+            className={cn(bgBrand, 'px-4 py-2 rounded-lg')}
             onPress={() => onSubmit(date)}
           >
             <Text className="text-white text-lg font-semibold">Save</Text>

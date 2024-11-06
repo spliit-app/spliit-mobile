@@ -6,7 +6,8 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
-import { BRAND_COLOR } from '@/utils/colors'
+import { cn } from '@/utils/cn'
+import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { addRecentGroup } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
 import { Stack, useRouter } from 'expo-router'
@@ -79,7 +80,10 @@ export default function AddGroupByUrlModal() {
               }
               setIsPending(false)
             }}
-            className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
+            className={cn(
+              bgBrand,
+              'flex-1 flex-row justify-center rounded-lg px-4 py-2'
+            )}
           >
             <Text className="text-white text-lg font-semibold">
               {isPending ? 'Adding…' : 'Add'}

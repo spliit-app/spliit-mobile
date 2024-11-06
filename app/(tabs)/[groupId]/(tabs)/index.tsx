@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn'
+import { textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { updateRecentGroup } from '@/utils/recentGroups'
 import { Expense, trpc } from '@/utils/trpc'
@@ -87,7 +88,10 @@ function ExpenseList({
               You can now add expenses to it.
             </Text>
             <Pressable
-              className="flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
+              className={cn(
+                textBrand,
+                'flex-row justify-center rounded-lg px-4 py-2'
+              )}
               onPress={() =>
                 router.push({
                   pathname: '/(tabs)/[groupId]/create-expense',
@@ -204,7 +208,7 @@ function ExpenseList({
                       })
                     }
                   >
-                    <Text className="text-emerald-600 text-lg">
+                    <Text className={cn(textBrand, 'text-lg')}>
                       Add expense
                     </Text>
                   </Pressable>

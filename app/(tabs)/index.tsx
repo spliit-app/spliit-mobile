@@ -25,7 +25,8 @@ import { MenuView } from '@react-native-menu/menu'
 import { match } from 'ts-pattern'
 import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import { BRAND_COLOR } from '@/utils/colors'
+import { BRAND_COLOR, bgBrand, textBrand } from '@/utils/colors'
+import { cn } from '@/utils/cn'
 
 export default function GroupsScreen() {
   const [recentGroups, setRecentGroups] = useState<RecentGroup[] | null>(null)
@@ -80,7 +81,10 @@ export default function GroupsScreen() {
               You are now ready to create your first group.
             </Text>
             <Pressable
-              className="flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2 mt-4"
+              className={cn(
+                bgBrand,
+                'flex-row justify-center rounded-lg px-4 py-2 mt-4'
+              )}
               onPress={() =>
                 router.push({
                   pathname: '/(tabs)/create-group',
@@ -103,7 +107,7 @@ export default function GroupsScreen() {
                 })
               }
             >
-              <Text className="text-emerald-600 text-lg font-semibold">
+              <Text className={cn(textBrand, 'text-lg font-semibold')}>
                 Add group by URL
               </Text>
             </Pressable>
@@ -215,10 +219,10 @@ export default function GroupsScreen() {
                   <Text className="text-lg font-bold">{title}</Text>
                   <View className="flex-row gap-4">
                     <Link href="/create-group" asChild>
-                      <Text className="text-lg text-emerald-600">Create</Text>
+                      <Text className={cn(textBrand, 'text-lg')}>Create</Text>
                     </Link>
                     <Link href="/add-group-by-url" asChild>
-                      <Text className="text-lg text-emerald-600">
+                      <Text className={cn(textBrand, 'text-lg')}>
                         Add by URL
                       </Text>
                     </Link>

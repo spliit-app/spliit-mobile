@@ -14,7 +14,7 @@ import {
   TextInput,
 } from '@/components/form'
 import { FontAwesome, FontAwesome6 } from '@expo/vector-icons'
-import { BRAND_COLOR } from '@/utils/colors'
+import { BRAND_COLOR, bgBrand, textBrand } from '@/utils/colors'
 import { cn } from '@/utils/cn'
 
 export function GroupForm({
@@ -129,7 +129,7 @@ export function GroupForm({
           }}
           className="px-4 py-2 flex-shrink-0 justify-end"
         >
-          <Text className="text-lg text-emerald-600">Add</Text>
+          <Text className={cn(textBrand, 'text-lg')}>Add</Text>
         </Pressable>
       </View>
       <FormSection>
@@ -193,7 +193,10 @@ export function GroupForm({
           onPress={handleSubmit(async (values) => {
             await onSave(values)
           })}
-          className="flex-1 flex-row justify-center bg-emerald-600 rounded-lg px-4 py-2"
+          className={cn(
+            bgBrand,
+            'flex-1 flex-row justify-center rounded-lg px-4 py-2'
+          )}
         >
           <Text className="text-white text-lg font-semibold">
             {isSubmitting ? 'Saving…' : 'Save'}
