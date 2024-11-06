@@ -1,4 +1,5 @@
 import {
+  AmountInput,
   CategoryInput,
   DateInput,
   ErrorMessage,
@@ -18,7 +19,6 @@ import {
   ExpenseFormValues,
   expenseFormSchema,
 } from 'spliit-api/src/lib/schemas'
-import CurrencyInput from 'react-native-currency-input'
 import Checkbox from 'expo-checkbox'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { match } from 'ts-pattern'
@@ -145,18 +145,12 @@ export function ExpenseForm({
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
-              <CurrencyInput
-                onChangeValue={(value) =>
-                  onChange(enforceCurrencyPattern(String(value)))
-                }
+              <AmountInput
+                onChangeValue={(value) => onChange(value)}
                 onBlur={onBlur}
                 value={value}
-                prefix={group.currency}
-                delimiter=","
-                separator="."
-                renderTextInput={(props) => (
-                  <TextInput {...props} hasError={!!errors.amount} />
-                )}
+                hasError={!!errors.amount}
+                currency={group.currency}
               />
             )}
             name="amount"
@@ -353,58 +347,43 @@ export function ExpenseForm({
                         match(splitMode)
                           .with('EVENLY', () => null)
                           .with('BY_SHARES', () => (
-                            <CurrencyInput
-                              value={paidFor.shares}
-                              onChangeValue={(value) =>
-                                updatePaidFor(paidFor.participant, value)
-                              }
-                              suffix=" shares"
-                              precision={0}
-                              renderTextInput={(props) => (
-                                <TextInput
-                                  className="w-32"
-                                  hasError={!!errors.paidFor}
-                                  {...props}
-                                />
-                              )}
-                            />
+                            <View className="flex-row gap-1 items-center">
+                              <AmountInput
+                                value={paidFor.shares}
+                                onChangeValue={(value) =>
+                                  updatePaidFor(paidFor.participant, value)
+                                }
+                                hasError={!!errors.paidFor}
+                                className="w-32"
+                                precision={0}
+                              />
+                              <Text className="text-sm pt-1">shares</Text>
+                            </View>
                           ))
                           .with('BY_PERCENTAGE', () => (
-                            <CurrencyInput
-                              value={paidFor.shares}
-                              onChangeValue={(value) =>
-                                updatePaidFor(paidFor.participant, value)
-                              }
-                              suffix=" %"
-                              precision={0}
-                              delimiter=","
-                              separator="."
-                              renderTextInput={(props) => (
-                                <TextInput
-                                  className="w-32"
-                                  hasError={!!errors.paidFor}
-                                  {...props}
-                                />
-                              )}
-                            />
+                            <View className="flex-row gap-1 items-center">
+                              <AmountInput
+                                value={paidFor.shares}
+                                onChangeValue={(value) =>
+                                  updatePaidFor(paidFor.participant, value)
+                                }
+                                hasError={!!errors.paidFor}
+                                className="w-32"
+                                precision={0}
+                              />
+                              <Text className="text-sm pt-1">%</Text>
+                            </View>
                           ))
                           .with('BY_AMOUNT', () => (
-                            <CurrencyInput
+                            <AmountInput
                               value={paidFor.shares}
                               onChangeValue={(value) =>
                                 updatePaidFor(paidFor.participant, value)
                               }
-                              prefix={group.currency}
+                              currency={group.currency}
                               precision={2}
-                              delimiter=","
-                              separator="."
-                              renderTextInput={(props) => (
-                                <TextInput
-                                  className="w-32"
-                                  hasError={!!errors.paidFor}
-                                  {...props}
-                                />
-                              )}
+                              className="w-32"
+                              hasError={!!errors.paidFor}
                             />
                           ))
                           .exhaustive()}

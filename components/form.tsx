@@ -74,6 +74,142 @@ export function TextInput({
   )
 }
 
+export function AmountInput({
+  value,
+  onChangeValue,
+  onChangeText,
+  onBlur,
+  onFocus,
+  className,
+  hasError,
+  currency = '',
+  precision = 2,
+  ...props
+}: {
+  value?: number
+  onChangeValue: (value: number) => void
+  hasError?: boolean
+  currency?: string
+  precision?: number
+} & Omit<TextInputProps, 'value'>) {
+  const [textValue, setTextValue] = useState(
+    formatLocaleNumber({
+      number: value || 0,
+      locale: 'en-US',
+      currency,
+      precision,
+    })
+  )
+
+  return (
+    <TextInput
+      value={textValue}
+      hasError={hasError}
+      onChangeText={(text) => {
+        onChangeText?.(text)
+        setTextValue(text)
+        const valueAsNumber = parseLocaleNumber({
+          numberString: text,
+          locale: 'en-US',
+          currency,
+        })
+        if (!Number.isNaN(valueAsNumber)) {
+          onChangeValue?.(valueAsNumber)
+        }
+      }}
+      onBlur={(event) => {
+        onBlur?.(event)
+        const valueAsNumber =
+          parseLocaleNumber({
+            numberString: textValue,
+            locale: 'en-US',
+            currency,
+          }) || 0
+        setTextValue(
+          formatLocaleNumber({
+            number: valueAsNumber,
+            locale: 'en-US',
+            currency,
+            precision,
+          })
+        )
+      }}
+      className={cn(className)}
+      {...props}
+    />
+  )
+}
+
+function formatLocaleNumber({
+  number,
+  locale,
+  currency,
+  precision,
+}: {
+  number: number
+  locale: string
+  currency: string
+  precision: number
+}) {
+  return formatCurrency({
+    currency,
+    amount: number,
+    locale,
+    fractions: true,
+    precision,
+  })
+}
+
+function formatCurrency({
+  currency,
+  amount,
+  locale,
+  fractions,
+  precision,
+}: {
+  currency: string
+  amount: number
+  locale: string
+  fractions?: boolean
+  precision: number
+}) {
+  const format = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision,
+    style: 'currency',
+    // '€' will be placed in correct position
+    currency: 'EUR',
+  })
+  const formattedAmount = format.format(fractions ? amount : amount / 100)
+  return currency
+    ? formattedAmount.replace('€', currency)
+    : formattedAmount.replace(/\s*€\s*/, '')
+}
+
+function parseLocaleNumber({
+  numberString,
+  locale,
+  currency,
+}: {
+  numberString: string
+  locale: string
+  currency?: string
+}) {
+  const example = 12345.6
+  const formattedExample = new Intl.NumberFormat(locale).format(example)
+
+  const groupingSeparator = formattedExample.includes('12,345') ? ',' : '.'
+  const decimalSeparator = formattedExample.includes('.6') ? '.' : ','
+
+  // Remove grouping separators and replace decimal separator with a dot
+  const normalizedNumberString = numberString
+    .replace(new RegExp(`\\${groupingSeparator}`, 'g'), '')
+    .replace(new RegExp(`\\${decimalSeparator}`), '.')
+    .replace(currency ?? '', '')
+
+  return parseFloat(normalizedNumberString)
+}
+
 export function CategoryInput({
   value,
   categories,
