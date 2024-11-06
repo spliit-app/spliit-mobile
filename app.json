@@ -19,7 +19,10 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "app.spliit.spliitmobile"
+      "bundleIdentifier": "app.spliit.spliitmobile",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     }
   }
 }

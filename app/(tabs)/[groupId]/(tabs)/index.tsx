@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn'
-import { textBrand } from '@/utils/colors'
+import { bgBrand, textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { updateRecentGroup } from '@/utils/recentGroups'
 import { Expense, trpc } from '@/utils/trpc'
@@ -89,7 +89,7 @@ function ExpenseList({
             </Text>
             <Pressable
               className={cn(
-                textBrand,
+                bgBrand,
                 'flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
               )}
               onPress={() =>
