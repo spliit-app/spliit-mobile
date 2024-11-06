@@ -105,6 +105,8 @@ export function AmountInput({
     <TextInput
       value={textValue}
       hasError={hasError}
+      inputMode="decimal"
+      keyboardType="decimal-pad"
       onChangeText={(text) => {
         onChangeText?.(text)
         setTextValue(text)
