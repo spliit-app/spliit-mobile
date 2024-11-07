@@ -5,6 +5,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { BRAND_COLOR } from '@/utils/colors'
 import { ExpenseForm } from '@/components/expense-form'
+import { TrackScreen } from '@/components/analytics'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -24,6 +25,10 @@ export default function ExpenseScreen() {
 
   return (
     <>
+      <TrackScreen
+        screenName="group-edit-expense"
+        eventProps={{ groupId, expenseId }}
+      />
       <Stack.Screen
         options={{
           title: expenseData?.expense.title ?? '…',

@@ -6,11 +6,13 @@ import { trpc } from '@/utils/trpc'
 import { addRecentGroup } from '@/utils/recentGroups'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { GroupForm } from '@/components/group-form'
+import { TrackScreen, useAnalytics } from '@/components/analytics'
 
 export default function CreateGroupScreen() {
   const router = useRouter()
   const { mutateAsync } = trpc.groups.create.useMutation()
   const utils = trpc.useUtils()
+  const analytics = useAnalytics()
 
   return (
     <>
@@ -25,6 +27,7 @@ export default function CreateGroupScreen() {
           ),
         }}
       />
+      <TrackScreen screenName="create-group" />
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} className="flex-1 bg-white">
           <KeyboardAwareScrollView bottomOffset={20}>
@@ -37,6 +40,7 @@ export default function CreateGroupScreen() {
                   groupId,
                   groupName: groupFormValues.name,
                 })
+                analytics.trackEvent({ eventName: 'create-group' })
                 router.back()
               }}
             />

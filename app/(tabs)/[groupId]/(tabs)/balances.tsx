@@ -1,3 +1,4 @@
+import { TrackScreen } from '@/components/analytics'
 import { textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { trpc } from '@/utils/trpc'
@@ -18,7 +19,12 @@ export default function BalancesScreen() {
 
   if (!data?.group) return null
 
-  return <Balances group={data.group} />
+  return (
+    <>
+      <TrackScreen screenName="group-balances" eventProps={{ groupId }} />
+      <Balances group={data.group} />
+    </>
+  )
 }
 
 function Balances({

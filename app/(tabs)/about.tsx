@@ -1,23 +1,18 @@
 import { BRAND_COLOR, bgBrand } from '@/utils/colors'
-import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
+import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Stack, useRouter } from 'expo-router'
-import {
-  Button,
-  Linking,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native'
+import { Button, Linking, Pressable, Text, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import DeviceInfo from 'react-native-device-info'
 import { cn } from '@/utils/cn'
+import { TrackScreen } from '@/components/analytics'
 
 export default function AboutScreen() {
   const router = useRouter()
 
   return (
     <>
+      <TrackScreen screenName="about" />
       <Stack.Screen
         options={{
           headerRight: () => (

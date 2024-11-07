@@ -27,6 +27,7 @@ import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { BRAND_COLOR, bgBrand, textBrand } from '@/utils/colors'
 import { cn } from '@/utils/cn'
+import { TrackScreen } from '@/components/analytics'
 
 export default function GroupsScreen() {
   const [recentGroups, setRecentGroups] = useState<RecentGroup[] | null>(null)
@@ -60,6 +61,7 @@ export default function GroupsScreen() {
 
   return (
     <SafeAreaProvider>
+      <TrackScreen screenName="home" />
       <SafeAreaView className="flex-1 bg-white">
         {recentGroups === null ? (
           <View className="h-full flex-col justify-center items-center gap-4">

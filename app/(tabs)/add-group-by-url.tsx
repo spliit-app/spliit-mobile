@@ -1,3 +1,4 @@
+import { TrackScreen } from '@/components/analytics'
 import {
   ErrorMessage,
   FormGroup,
@@ -23,6 +24,7 @@ export default function AddGroupByUrlModal() {
 
   return (
     <>
+      <TrackScreen screenName="add-group-by-url" />
       <Stack.Screen
         options={{
           title: 'Add group by URL',

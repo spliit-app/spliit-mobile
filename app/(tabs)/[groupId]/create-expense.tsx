@@ -10,6 +10,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { BRAND_COLOR } from '@/utils/colors'
 import { ExpenseForm } from '@/components/expense-form'
+import { TrackScreen, useAnalytics } from '@/components/analytics'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -23,9 +24,11 @@ export default function ExpenseScreen() {
 
   const { mutateAsync } = trpc.groups.expenses.create.useMutation()
   const utils = trpc.useUtils()
+  const analytics = useAnalytics()
 
   return (
     <>
+      <TrackScreen screenName="group-create-expense" eventProps={{ groupId }} />
       <Stack.Screen
         options={{
           title: 'Add expense',
@@ -58,6 +61,10 @@ export default function ExpenseScreen() {
                 onSave={async (expenseFormValues) => {
                   await mutateAsync({ groupId, expenseFormValues })
                   await utils.groups.invalidate()
+                  analytics.trackEvent({
+                    eventName: 'create-expense',
+                    eventProps: { groupId },
+                  })
                   router.back()
                 }}
               />

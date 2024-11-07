@@ -1,3 +1,4 @@
+import { TrackScreen } from '@/components/analytics'
 import { cn } from '@/utils/cn'
 import { bgBrand, textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -33,7 +34,12 @@ export default function GroupScreen() {
 
   if (!data?.group) return null
 
-  return <ExpenseList group={data.group} />
+  return (
+    <>
+      <TrackScreen screenName="group-expenses" eventProps={{ groupId }} />
+      <ExpenseList group={data.group} />
+    </>
+  )
 }
 
 const PAGE_SIZE = 20

@@ -5,6 +5,7 @@ import { trpc } from '@/utils/trpc'
 import { BRAND_COLOR } from '@/utils/colors'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { GroupForm } from '@/components/group-form'
+import { TrackScreen } from '@/components/analytics'
 
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()
@@ -15,6 +16,7 @@ export default function GroupSettingsScreen() {
 
   return (
     <>
+      <TrackScreen screenName="group-settings" eventProps={{ groupId }} />
       <Stack.Screen
         options={{
           headerRight: () => (
