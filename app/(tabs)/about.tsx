@@ -6,9 +6,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import DeviceInfo from 'react-native-device-info'
 import { cn } from '@/utils/cn'
 import { TrackScreen } from '@/components/analytics'
+import { SettingsForm } from '@/components/settings-form'
+import { useSettings} from '@/utils/settings'
 
 export default function AboutScreen() {
   const router = useRouter()
+  const { settings, updateSettings } = useSettings();    
 
   return (
     <>
@@ -60,6 +63,17 @@ export default function AboutScreen() {
                   View on GitHub
                 </Text>
               </Pressable>
+            </View>
+            <View>
+              {settings && (
+              <SettingsForm
+                settings={settings}
+                onSave={async (settings) => {
+                  await updateSettings(settings)
+                  router.back()
+                }}
+              />
+              )}
             </View>
             <View className="flex-1" />
             <Text className="mt-12 text-center text-slate-500">
