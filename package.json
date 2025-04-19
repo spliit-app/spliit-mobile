@@ -57,7 +57,8 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.14",
     "ts-pattern": "^5.5.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "expo-localization": "~15.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
