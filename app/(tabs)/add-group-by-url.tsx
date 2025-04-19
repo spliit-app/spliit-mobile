@@ -10,6 +10,7 @@ import {
 import { cn } from '@/utils/cn'
 import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { addRecentGroup } from '@/utils/recentGroups'
+import { useSettings } from '@/utils/settings'
 import { trpc } from '@/utils/trpc'
 import { Stack, useRouter } from 'expo-router'
 import { useState } from 'react'
@@ -21,6 +22,9 @@ export default function AddGroupByUrlModal() {
   const utils = trpc.useUtils()
   const router = useRouter()
   const [isPending, setIsPending] = useState(false)
+  const {
+    settings: { baseUrl },
+  } = useSettings()
 
   return (
     <>
@@ -47,7 +51,7 @@ export default function AddGroupByUrlModal() {
               autoComplete="url"
               autoCorrect={false}
               autoCapitalize="none"
-              placeholder="https://spliit.app/..."
+              placeholder={`${baseUrl}...`}
               value={url}
               onChangeText={(text) => setUrl(text)}
             />
@@ -84,7 +88,7 @@ export default function AddGroupByUrlModal() {
             }}
             className={cn(
               bgBrand,
-              'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
+              'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
             )}
           >
             <Text className="text-white text-lg font-semibold">
