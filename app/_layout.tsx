@@ -1,24 +1,30 @@
 import { Stack } from 'expo-router'
 import './global.css'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink } from '@trpc/client'
 import { trpc } from '@/utils/trpc'
 import superjson from 'superjson'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
+import { SettingsProvider, useSettings} from '@/utils/settings'
 
-export default function RootLayout() {
+
+export function App() {
   const [queryClient] = useState(() => new QueryClient())
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
+  const { settings } = useSettings();  
+
+  const trpcClient = useMemo(() => 
+      trpc.createClient({
       links: [
         httpBatchLink({
-          url: 'https://spliit.app/api/trpc',
+          url: `${settings.baseUrl}api/trpc`,
           transformer: superjson,
         }),
       ],
-    })
+    }),
+    [settings]
   )
+
   return (
     <KeyboardProvider>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
@@ -30,4 +36,12 @@ export default function RootLayout() {
       </trpc.Provider>
     </KeyboardProvider>
   )
+}
+
+export default function RootLayout() {
+  return (
+    <SettingsProvider>
+      <App />
+    </SettingsProvider>
+  );
 }

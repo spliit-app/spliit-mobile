@@ -1,4 +1,5 @@
 import { BRAND_COLOR } from '@/utils/colors'
+import { useSettings } from '@/utils/settings'
 import { trpc } from '@/utils/trpc'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { MenuView } from '@react-native-menu/menu'
@@ -10,6 +11,10 @@ export default function GroupLayout() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>()
   const { data } = trpc.groups.get.useQuery({ groupId })
   const router = useRouter()
+  const {
+    settings: { baseUrl },
+  } = useSettings()
+
   return (
     <>
       <Stack.Screen
@@ -32,15 +37,15 @@ export default function GroupLayout() {
                     router.push({
                       pathname: '/[groupId]/settings',
                       params: { groupId },
-                    })
+                    }),
                   )
                   .with('share', () =>
                     Share.share({
                       title: `Join the group ${
                         data?.group?.name ?? ''
                       } on Spliit!`,
-                      url: `https://spliit.app/groups/${groupId}`,
-                    })
+                      url: `${baseUrl}groups/${groupId}`,
+                    }),
                   )
               }}
               actions={[

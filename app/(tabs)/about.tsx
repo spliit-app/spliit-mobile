@@ -6,9 +6,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import DeviceInfo from 'react-native-device-info'
 import { cn } from '@/utils/cn'
 import { TrackScreen } from '@/components/analytics'
+import { SettingsForm } from '@/components/settings-form'
+import { useSettings } from '@/utils/settings'
 
 export default function AboutScreen() {
   const router = useRouter()
+  const { settings, updateSettings } = useSettings()
 
   return (
     <>
@@ -36,7 +39,7 @@ export default function AboutScreen() {
               <Pressable
                 className={cn(
                   bgBrand,
-                  'py-2 px-3 rounded-lg flex-row items-center gap-3 active:opacity-60'
+                  'py-2 px-3 rounded-lg flex-row items-center gap-3 active:opacity-60',
                 )}
                 onPress={() =>
                   Linking.openURL('https://spliit.app/?ref=mobile-app')
@@ -60,6 +63,17 @@ export default function AboutScreen() {
                   View on GitHub
                 </Text>
               </Pressable>
+            </View>
+            <View className="-mx-4 mt-6">
+              {settings && (
+                <SettingsForm
+                  settings={settings}
+                  onSave={async (settings) => {
+                    await updateSettings(settings)
+                    router.back()
+                  }}
+                />
+              )}
             </View>
             <View className="flex-1" />
             <Text className="mt-12 text-center text-slate-500">
