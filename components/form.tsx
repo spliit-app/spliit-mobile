@@ -3,6 +3,7 @@ import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { Category, Group, GroupParticipant, trpc } from '@/utils/trpc'
 import { errorMessages } from '@/utils/validation'
 import { FontAwesome6 } from '@expo/vector-icons'
+import { useLocales } from 'expo-localization'
 import { PropsWithChildren, useState } from 'react'
 import {
   Text,
@@ -20,7 +21,7 @@ import DateTimePicker from 'react-native-ui-datepicker'
 
 export function FormSection({ children }: PropsWithChildren) {
   return (
-    <View className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between flex-col gap-4">
+    <View className="p-4 bg-slate-100 rounded-md mb-2 mx-4 justify-between flex-col gap-4">
       {children}
     </View>
   )
@@ -67,7 +68,7 @@ export function TextInput({
       className={cn(
         'bg-white px-2 pt-1 pb-2 rounded-lg border border-gray-200 text-lg',
         hasError ? 'border-red-500' : '',
-        className
+        className,
       )}
       {...props}
     />
@@ -92,13 +93,14 @@ export function AmountInput({
   currency?: string
   precision?: number
 } & Omit<TextInputProps, 'value'>) {
+  const locale = useLocales().at(0)
   const [textValue, setTextValue] = useState(
     formatLocaleNumber({
       number: value || 0,
-      locale: 'en-US',
+      locale: locale?.languageTag ?? 'en-US',
       currency,
       precision,
-    })
+    }),
   )
 
   return (
@@ -112,7 +114,7 @@ export function AmountInput({
         setTextValue(text)
         const valueAsNumber = parseLocaleNumber({
           numberString: text,
-          locale: 'en-US',
+          locale: locale?.languageTag ?? 'en-US',
           currency,
         })
         if (!Number.isNaN(valueAsNumber)) {
@@ -124,16 +126,16 @@ export function AmountInput({
         const valueAsNumber =
           parseLocaleNumber({
             numberString: textValue,
-            locale: 'en-US',
+            locale: locale?.languageTag ?? 'en-US',
             currency,
           }) || 0
         setTextValue(
           formatLocaleNumber({
             number: valueAsNumber,
-            locale: 'en-US',
+            locale: locale?.languageTag ?? 'en-US',
             currency,
             precision,
-          })
+          }),
         )
       }}
       className={cn(className)}
@@ -230,7 +232,7 @@ export function CategoryInput({
       <Pressable
         className={cn(
           'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
-          hasError && 'border-red-500'
+          hasError && 'border-red-500',
         )}
         onPress={() => {
           setOpen(true)
@@ -283,7 +285,7 @@ export function ParticipantInput({
       <Pressable
         className={cn(
           'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
-          hasError && 'border-red-500'
+          hasError && 'border-red-500',
         )}
         onPress={() => {
           setOpen(true)
@@ -335,7 +337,7 @@ export function DateInput({
       <Pressable
         className={cn(
           'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
-          hasError && 'border-red-500'
+          hasError && 'border-red-500',
         )}
         onPress={() => {
           setOpen(true)
@@ -398,14 +400,14 @@ function ParticipantInputModalContent({
               <Pressable
                 className={cn(
                   'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
-                  index > 0 && 'border-t'
+                  index > 0 && 'border-t',
                 )}
                 onPress={() => setParticipant(item)}
               >
                 <Text
                   className={cn(
                     'flex-1 items-center text-lg',
-                    participant?.id === item.id && 'font-semibold'
+                    participant?.id === item.id && 'font-semibold',
                   )}
                 >
                   {item.name}
@@ -454,8 +456,8 @@ function CategoryInputModalContent({
         ...acc,
         [category.grouping]: [...(acc[category.grouping] ?? []), category],
       }),
-      {}
-    )
+      {},
+    ),
   ).map(([group, categories]) => ({
     title: group,
     data: categories,
@@ -476,14 +478,14 @@ function CategoryInputModalContent({
               <Pressable
                 className={cn(
                   'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
-                  index > 0 && 'border-t'
+                  index > 0 && 'border-t',
                 )}
                 onPress={() => setCategory(item)}
               >
                 <Text
                   className={cn(
                     'flex-1 items-center text-lg',
-                    category?.id === item.id && 'font-semibold'
+                    category?.id === item.id && 'font-semibold',
                   )}
                 >
                   {item.name}

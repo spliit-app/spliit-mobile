@@ -23,6 +23,9 @@
       "config": {
         "usesNonExemptEncryption": false
       }
-    }
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }
