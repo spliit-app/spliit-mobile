@@ -4,7 +4,9 @@ import { trpc } from '@/utils/trpc'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { MenuView } from '@react-native-menu/menu'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { useColorScheme } from 'nativewind'
 import { Platform, Pressable, Share, View } from 'react-native'
+import colors from 'tailwindcss/colors'
 import { match } from 'ts-pattern'
 
 export default function GroupLayout() {
@@ -14,18 +16,29 @@ export default function GroupLayout() {
   const {
     settings: { baseUrl },
   } = useSettings()
+  const { colorScheme } = useColorScheme()
 
   return (
     <>
       <Stack.Screen
         options={{
           title: data?.group?.name ?? '…',
+          headerTintColor:
+            colorScheme === 'light' ? colors.black : colors.white,
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? colors.white : colors.black,
+          },
           headerLeft: () => (
             <Pressable
               className="flex-row items-center gap-2 py-2 pr-2 active:opacity-60"
               onPress={() => router.dismiss()}
             >
-              <FontAwesome6 size={20} color="#059669" name="chevron-left" />
+              <FontAwesome6
+                size={20}
+                className="text-foreground-accent"
+                name="chevron-left"
+              />
             </Pressable>
           ),
           headerRight: () => (
@@ -68,7 +81,11 @@ export default function GroupLayout() {
               style={{ flexDirection: 'row', alignItems: 'stretch' }}
             >
               <View className="-mr-5 px-5 py-5 flex-row items-start">
-                <FontAwesome6 name="ellipsis" size={14} color={BRAND_COLOR} />
+                <FontAwesome6
+                  name="ellipsis"
+                  size={14}
+                  className="text-foreground-accent"
+                />
               </View>
             </MenuView>
           ),

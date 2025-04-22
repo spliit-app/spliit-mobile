@@ -87,7 +87,7 @@ export function GroupForm({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                hasError={!!errors.name}
+                hasError={!!errors.currency}
               />
             )}
             name="currency"
@@ -129,7 +129,7 @@ export function GroupForm({
           }}
           className="px-4 py-2 flex-shrink-0 justify-end active:opacity-60"
         >
-          <Text className={cn(textBrand, 'text-lg')}>Add</Text>
+          <Text className="text-lg text-foreground-accent">Add</Text>
         </Pressable>
       </View>
       <FormSection>
@@ -161,7 +161,7 @@ export function GroupForm({
                         if (isDisabled) {
                           Alert.alert(
                             'Partitipant with expenses',
-                            'You can not remove this participant because they have expenses.'
+                            'You can not remove this participant because they have expenses.',
                           )
                         } else {
                           remove(index)
@@ -169,10 +169,14 @@ export function GroupForm({
                       }}
                       className={cn(
                         'px-2 -mr-2 justify-center active:opacity-60',
-                        isDisabled && 'opacity-20'
+                        isDisabled && 'opacity-20',
                       )}
                     >
-                      <FontAwesome name="trash-o" size={20} color="red" />
+                      <FontAwesome
+                        name="trash-o"
+                        size={20}
+                        className="text-foreground-danger"
+                      />
                     </Pressable>
                   </View>
                   {error && <ErrorMessage>{error.message}</ErrorMessage>}
@@ -193,12 +197,9 @@ export function GroupForm({
           onPress={handleSubmit(async (values) => {
             await onSave(values)
           })}
-          className={cn(
-            bgBrand,
-            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
-          )}
+          className="flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60 bg-background-accent"
         >
-          <Text className="text-white text-lg font-semibold">
+          <Text className="text-foreground-on-accent text-lg font-semibold">
             {isSubmitting ? 'Saving…' : 'Save'}
           </Text>
         </Pressable>

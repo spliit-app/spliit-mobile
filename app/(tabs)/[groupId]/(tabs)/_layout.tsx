@@ -1,17 +1,34 @@
-import { BRAND_COLOR } from '@/utils/colors'
+import { useColor } from '@/utils/colors'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
+import { useColorScheme } from 'nativewind'
+import colors from 'tailwindcss/colors'
 
 export default function TabLayout() {
+  const { colorScheme } = useColorScheme()
+
+  const activeTintColor = useColor('hsl(163 94% 24%)', 'hsl(161 90% 45%)')
+  const inactiveTintColor = useColor(colors.slate['500'], colors.slate['400'])
+  const borderColor = useColor(colors.slate['500'], colors.slate['400'])
+
   return (
     <>
-      <Tabs>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: activeTintColor,
+          tabBarInactiveTintColor: inactiveTintColor,
+          tabBarStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? colors.white : colors.black,
+            borderColor,
+          },
+        }}
+      >
         <Tabs.Screen
           name="index"
           options={{
             title: 'Expenses',
             headerShown: false,
-            tabBarActiveTintColor: BRAND_COLOR,
             tabBarIcon: ({ color }) => (
               <FontAwesome6 name="list" size={28} color={color} />
             ),
@@ -22,11 +39,10 @@ export default function TabLayout() {
           options={{
             title: 'Balances',
             headerShown: false,
-            tabBarActiveTintColor: BRAND_COLOR,
             tabBarIcon: ({ color }) => (
               <FontAwesome6
                 name="money-bill-transfer"
-                size={28}
+                size={24}
                 color={color}
               />
             ),

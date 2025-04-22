@@ -1,6 +1,6 @@
 import { cn } from '@/utils/cn'
 import { BRAND_COLOR, bgBrand } from '@/utils/colors'
-import { Category, Group, GroupParticipant, trpc } from '@/utils/trpc'
+import { Category, GroupParticipant } from '@/utils/trpc'
 import { errorMessages } from '@/utils/validation'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { PropsWithChildren, useState } from 'react'
@@ -20,7 +20,7 @@ import DateTimePicker from 'react-native-ui-datepicker'
 
 export function FormSection({ children }: PropsWithChildren) {
   return (
-    <View className="p-4 bg-slate-100 rounded-md mb-2 mx-4 flex-row justify-between flex-col gap-4">
+    <View className="p-4 bg-background-card rounded-md mb-2 mx-4 justify-between flex-col gap-4">
       {children}
     </View>
   )
@@ -29,7 +29,10 @@ export function FormSection({ children }: PropsWithChildren) {
 export function FormSectionTitle({ className, ...props }: TextProps) {
   return (
     <Text
-      className={cn('text-lg font-bold px-4 mb-2 mt-4', className)}
+      className={cn(
+        'text-lg font-bold px-4 mb-2 mt-4 text-foreground',
+        className,
+      )}
       {...props}
     />
   )
@@ -40,16 +43,26 @@ export function FormGroup({ className, ...props }: ViewProps) {
 }
 
 export function Label({ className, ...props }: TextProps) {
-  return <Text className={cn('font-semibold', className)} {...props} />
+  return (
+    <Text
+      className={cn('font-semibold text-foreground', className)}
+      {...props}
+    />
+  )
 }
 
 export function HelpText({ className, ...props }: TextProps) {
-  return <Text className={cn('text-gray-600 text-sm', className)} {...props} />
+  return (
+    <Text
+      className={cn('text-sm text-foreground-secondary', className)}
+      {...props}
+    />
+  )
 }
 
 export function ErrorMessage({ children }: PropsWithChildren) {
   return (
-    <Text className="text-red-600 text-sm">
+    <Text className="text-foreground-danger text-sm">
       {typeof children === 'string' && children in errorMessages
         ? errorMessages[children]
         : children}
@@ -64,10 +77,11 @@ export function TextInput({
 }: TextInputProps & { hasError?: boolean }) {
   return (
     <BaseTextInput
+      verticalAlign="middle"
       className={cn(
-        'bg-white px-2 pt-1 pb-2 rounded-lg border border-gray-200 text-lg',
-        hasError ? 'border-red-500' : '',
-        className
+        'bg-background px-2 py-2 rounded-lg border border-border text-md text-foreground',
+        hasError ? 'border-foreground-danger' : '',
+        className,
       )}
       {...props}
     />
@@ -98,7 +112,7 @@ export function AmountInput({
       locale: 'en-US',
       currency,
       precision,
-    })
+    }),
   )
 
   return (
@@ -133,7 +147,7 @@ export function AmountInput({
             locale: 'en-US',
             currency,
             precision,
-          })
+          }),
         )
       }}
       className={cn(className)}
@@ -230,7 +244,7 @@ export function CategoryInput({
       <Pressable
         className={cn(
           'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
-          hasError && 'border-red-500'
+          hasError && 'border-red-500',
         )}
         onPress={() => {
           setOpen(true)
@@ -283,7 +297,7 @@ export function ParticipantInput({
       <Pressable
         className={cn(
           'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
-          hasError && 'border-red-500'
+          hasError && 'border-red-500',
         )}
         onPress={() => {
           setOpen(true)
@@ -335,7 +349,7 @@ export function DateInput({
       <Pressable
         className={cn(
           'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
-          hasError && 'border-red-500'
+          hasError && 'border-red-500',
         )}
         onPress={() => {
           setOpen(true)
@@ -398,14 +412,14 @@ function ParticipantInputModalContent({
               <Pressable
                 className={cn(
                   'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
-                  index > 0 && 'border-t'
+                  index > 0 && 'border-t',
                 )}
                 onPress={() => setParticipant(item)}
               >
                 <Text
                   className={cn(
                     'flex-1 items-center text-lg',
-                    participant?.id === item.id && 'font-semibold'
+                    participant?.id === item.id && 'font-semibold',
                   )}
                 >
                   {item.name}
@@ -454,8 +468,8 @@ function CategoryInputModalContent({
         ...acc,
         [category.grouping]: [...(acc[category.grouping] ?? []), category],
       }),
-      {}
-    )
+      {},
+    ),
   ).map(([group, categories]) => ({
     title: group,
     data: categories,
@@ -476,14 +490,14 @@ function CategoryInputModalContent({
               <Pressable
                 className={cn(
                   'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
-                  index > 0 && 'border-t'
+                  index > 0 && 'border-t',
                 )}
                 onPress={() => setCategory(item)}
               >
                 <Text
                   className={cn(
                     'flex-1 items-center text-lg',
-                    category?.id === item.id && 'font-semibold'
+                    category?.id === item.id && 'font-semibold',
                   )}
                 >
                   {item.name}

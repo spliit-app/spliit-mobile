@@ -4,13 +4,7 @@ import {
   removeRecentGroup,
 } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
-import {
-  Link,
-  router,
-  useNavigation,
-  usePathname,
-  useRouter,
-} from 'expo-router'
+import { Link, router, useNavigation, usePathname } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import {
   ActivityIndicator,
@@ -19,6 +13,7 @@ import {
   SectionList,
   Text,
   View,
+  useColorScheme,
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { MenuView } from '@react-native-menu/menu'
@@ -62,7 +57,7 @@ export default function GroupsScreen() {
   return (
     <SafeAreaProvider>
       <TrackScreen screenName="home" />
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-background">
         {recentGroups === null ? (
           <View className="h-full flex-col justify-center items-center gap-4">
             <ActivityIndicator size="large" />
@@ -85,7 +80,7 @@ export default function GroupsScreen() {
             <Pressable
               className={cn(
                 bgBrand,
-                'flex-row justify-center rounded-lg px-4 py-2 mt-4 active:opacity-60'
+                'flex-row justify-center rounded-lg px-4 py-2 mt-4 active:opacity-60',
               )}
               onPress={() =>
                 router.push({
@@ -120,10 +115,10 @@ export default function GroupsScreen() {
             keyExtractor={(group) => group.groupId}
             renderItem={({ item: recentGroup }) => {
               const group = data?.groups.find(
-                (group) => group.id === recentGroup.groupId
+                (group) => group.id === recentGroup.groupId,
               )
               return (
-                <View className="mx-4 mb-2 bg-slate-100 rounded-md flex-row justify-between items-stretch">
+                <View className="mx-4 mb-2 bg-background-card rounded-md flex-row justify-between items-stretch">
                   <Link
                     href={{
                       pathname: './[groupId]',
@@ -132,28 +127,26 @@ export default function GroupsScreen() {
                     asChild
                   >
                     <Pressable className="flex-1 p-4 gap-1 active:opacity-60">
-                      <Text className="font-semibold">
+                      <Text className="font-semibold text-foreground">
                         {recentGroup.groupName}
                       </Text>
                       <View className="flex-row items-center">
                         <FontAwesome6
                           name="users"
-                          className="mr-2"
-                          color="grey"
+                          className="mr-2 text-foreground-secondary"
                         />
-                        <Text className="text-slate-500 text-sm">
+                        <Text className="text-foreground-secondary text-sm">
                           {group?._count.participants ?? '…'}
                         </Text>
                         <FontAwesome6
                           name="calendar"
-                          className="ml-3 mr-2"
-                          color="grey"
+                          className="ml-3 mr-2 text-foreground-secondary"
                         />
-                        <Text className="text-slate-500 text-sm">
+                        <Text className="text-foreground-secondary text-sm">
                           {(group?.createdAt &&
                             new Date(group.createdAt).toLocaleDateString(
                               'en-US',
-                              { dateStyle: 'medium' }
+                              { dateStyle: 'medium' },
                             )) ??
                             '…'}
                         </Text>
@@ -172,7 +165,7 @@ export default function GroupsScreen() {
                         })
                         .with('delete', () => {
                           removeRecentGroup(recentGroup.groupId).then(() =>
-                            fetchGroups()
+                            fetchGroups(),
                           )
                         })
                     }}
@@ -216,18 +209,26 @@ export default function GroupsScreen() {
                     onPress={() => router.push('/about')}
                     className="active:opacity-60"
                   >
-                    <FontAwesome5 name="cog" color={BRAND_COLOR} size={20} />
+                    <FontAwesome5
+                      className="text-foreground-accent"
+                      name="cog"
+                      size={20}
+                    />
                   </Pressable>
                 </View>
               ) : (
                 <View className="px-4 py-2 mt-2 flex-row justify-between items-baseline">
-                  <Text className="text-lg font-bold">{title}</Text>
+                  <Text className="text-lg font-bold text-foreground">
+                    {title}
+                  </Text>
                   <View className="flex-row gap-4">
                     <Link href="/create-group" asChild>
-                      <Text className={cn(textBrand, 'text-lg')}>Create</Text>
+                      <Text className="text-lg text-foreground-accent">
+                        Create
+                      </Text>
                     </Link>
                     <Link href="/add-group-by-url" asChild>
-                      <Text className={cn(textBrand, 'text-lg')}>
+                      <Text className="text-lg text-foreground-accent">
                         Add by URL
                       </Text>
                     </Link>

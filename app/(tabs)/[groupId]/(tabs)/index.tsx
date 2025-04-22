@@ -53,7 +53,7 @@ function ExpenseList({
   const { data, fetchNextPage, refetch, isInitialLoading } =
     trpc.groups.expenses.list.useInfiniteQuery(
       { groupId: group.id, limit: PAGE_SIZE },
-      { getNextPageParam: ({ nextCursor }) => nextCursor }
+      { getNextPageParam: ({ nextCursor }) => nextCursor },
     )
   const { mutateAsync: deleteAsync } = trpc.groups.expenses.delete.useMutation()
   const utils = trpc.useUtils()
@@ -79,7 +79,7 @@ function ExpenseList({
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-background">
         {isInitialLoading ? (
           <View className="h-full flex-col justify-center items-center gap-4">
             <ActivityIndicator size="large" />
@@ -96,7 +96,7 @@ function ExpenseList({
             <Pressable
               className={cn(
                 bgBrand,
-                'flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
+                'flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
               )}
               onPress={() =>
                 router.push({
@@ -115,7 +115,7 @@ function ExpenseList({
             sections={sections}
             keyExtractor={(expense) => expense.id}
             renderItem={({ item: expense }) => (
-              <View className="bg-slate-100 rounded-md mb-2 mx-4 flex-row">
+              <View className="bg-background-card rounded-md mb-2 mx-4 flex-row">
                 <Pressable
                   className="py-4 pl-4 flex-row flex-1 active:opacity-60"
                   onPress={() =>
@@ -126,10 +126,15 @@ function ExpenseList({
                   }
                 >
                   <View className="gap-1 flex-1">
-                    <Text className={cn(expense.isReimbursement && 'italic')}>
+                    <Text
+                      className={cn(
+                        expense.isReimbursement && 'italic',
+                        'text-foreground',
+                      )}
+                    >
                       {expense.title}
                     </Text>
-                    <Text className="text-xs text-slate-600">
+                    <Text className="text-xs text-foreground-secondary">
                       Paid by{' '}
                       <Text className="font-bold">{expense.paidBy.name}</Text>{' '}
                       for{' '}
@@ -142,10 +147,10 @@ function ExpenseList({
                     </Text>
                   </View>
                   <View className="gap-1 items-end flex-shrink-0 justify-between">
-                    <Text className="font-bold">
+                    <Text className="font-bold text-foreground">
                       {formatCurrency(group.currency, expense.amount / 100)}
                     </Text>
-                    <Text className="text-xs text-slate-600">
+                    <Text className="text-xs text-foreground-secondary">
                       {expense.createdAt.toLocaleDateString('en-US', {
                         dateStyle: 'medium',
                       })}
@@ -204,8 +209,10 @@ function ExpenseList({
             )}
             renderSectionHeader={({ section: { title } }) =>
               title === 'HEADER' ? (
-                <View className="px-4 pt-4 mt-2 bg-white flex-row justify-between items-baseline">
-                  <Text className="font-bold text-lg">Expenses</Text>
+                <View className="px-4 pt-4 mt-2 bg-background flex-row justify-between items-baseline">
+                  <Text className="font-bold text-lg text-foreground">
+                    Expenses
+                  </Text>
                   <Pressable
                     className="active:opacity-60"
                     onPress={() =>
@@ -215,14 +222,14 @@ function ExpenseList({
                       })
                     }
                   >
-                    <Text className={cn(textBrand, 'text-lg')}>
+                    <Text className="text-lg text-foreground-accent">
                       Add expense
                     </Text>
                   </Pressable>
                 </View>
               ) : (
-                <View className="px-4 pt-4 pb-2 bg-white">
-                  <Text className="font-bold text-slate-500 text-xs uppercase">
+                <View className="px-4 pt-4 pb-2 bg-background">
+                  <Text className="font-bold text-foreground-secondary text-xs uppercase">
                     {title}
                   </Text>
                 </View>

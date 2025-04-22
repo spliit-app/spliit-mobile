@@ -1,4 +1,4 @@
-import { ScrollView, Button } from 'react-native'
+import { ScrollView, Button, Pressable, Text } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { trpc } from '@/utils/trpc'
@@ -6,6 +6,8 @@ import { BRAND_COLOR } from '@/utils/colors'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { GroupForm } from '@/components/group-form'
 import { TrackScreen } from '@/components/analytics'
+import { useColorScheme } from 'nativewind'
+import colors from 'tailwindcss/colors'
 
 export default function GroupSettingsScreen() {
   const { groupId } = useGlobalSearchParams<{ groupId: string }>()
@@ -13,6 +15,7 @@ export default function GroupSettingsScreen() {
   const { mutateAsync } = trpc.groups.update.useMutation()
   const utils = trpc.useUtils()
   const router = useRouter()
+  const { colorScheme } = useColorScheme()
 
   return (
     <>
@@ -20,16 +23,20 @@ export default function GroupSettingsScreen() {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Button
-              title="Cancel"
-              color={BRAND_COLOR}
-              onPress={() => router.back()}
-            />
+            <Pressable onPress={() => router.back()}>
+              <Text className="text-foreground-accent">Close</Text>
+            </Pressable>
           ),
+          headerTintColor:
+            colorScheme === 'light' ? colors.black : colors.white,
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? colors.white : colors.black,
+          },
         }}
       />
       <SafeAreaProvider>
-        <SafeAreaView edges={['top']} className="flex-1 bg-white">
+        <SafeAreaView edges={['top']} className="flex-1 bg-background">
           <KeyboardAwareScrollView bottomOffset={20}>
             {data && (
               <GroupForm
