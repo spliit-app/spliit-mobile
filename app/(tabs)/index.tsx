@@ -190,7 +190,10 @@ export default function GroupsScreen() {
                     style={{ flexDirection: 'row', alignItems: 'stretch' }}
                   >
                     <View className="px-5 py-5 flex-row items-start">
-                      <FontAwesome6 name="ellipsis" />
+                      <FontAwesome6
+                        name="ellipsis"
+                        className="text-foreground-secondary"
+                      />
                     </View>
                   </MenuView>
                 </View>

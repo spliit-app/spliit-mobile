@@ -16,6 +16,7 @@ export const themes = {
     '--color-border-positive': colors.green['400'],
     '--color-background-negative': colors.red['300'],
     '--color-border-negative': colors.red['400'],
+    '--color-background-overlay': colors.gray['500'],
   }),
   dark: vars({
     '--color-background': colors.black,
@@ -24,12 +25,13 @@ export const themes = {
     '--color-foreground-danger': colors.red['600'],
     '--color-foreground-secondary': colors.slate['400'],
     '--color-foreground-on-accent': colors.black,
-    '--color-background-card': colors.slate['900'],
+    '--color-background-card': colors.gray['900'],
     '--color-background-accent': 'hsl(161 90% 45%)',
     '--color-border': colors.slate['800'],
     '--color-background-positive': colors.green['900'],
     '--color-border-positive': colors.green['800'],
     '--color-background-negative': colors.red['900'],
     '--color-border-negative': colors.red['800'],
+    '--color-background-overlay': colors.gray['800'],
   }),
 }

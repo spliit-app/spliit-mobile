@@ -24,6 +24,16 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { match } from 'ts-pattern'
 import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { cn } from '@/utils/cn'
+import { cssInterop } from 'nativewind'
+
+cssInterop(Checkbox, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      backgroundColor: 'color',
+    },
+  },
+})
 
 export function ExpenseForm({
   expense,
@@ -67,32 +77,34 @@ export function ExpenseForm({
           notes: expense.notes ?? '',
         }
       : reimbursementParams
-      ? {
-          title: reimbursementParams.title,
-          expenseDate: new Date(),
-          amount: String(reimbursementParams.amount / 100) as unknown as number, // hack,
-          category: 1,
-          paidBy: reimbursementParams.paidBy,
-          paidFor: [{ participant: reimbursementParams.paidFor, shares: 1 }],
-          splitMode: 'EVENLY',
-          saveDefaultSplittingOptions: false,
-          isReimbursement: true,
-          documents: [],
-          notes: '',
-        }
-      : {
-          title: '',
-          expenseDate: new Date(),
-          amount: 0,
-          category: 0,
-          paidBy: undefined,
-          paidFor: [],
-          splitMode: 'EVENLY',
-          saveDefaultSplittingOptions: false,
-          isReimbursement: false,
-          documents: [],
-          notes: '',
-        },
+        ? {
+            title: reimbursementParams.title,
+            expenseDate: new Date(),
+            amount: String(
+              reimbursementParams.amount / 100,
+            ) as unknown as number, // hack,
+            category: 1,
+            paidBy: reimbursementParams.paidBy,
+            paidFor: [{ participant: reimbursementParams.paidFor, shares: 1 }],
+            splitMode: 'EVENLY',
+            saveDefaultSplittingOptions: false,
+            isReimbursement: true,
+            documents: [],
+            notes: '',
+          }
+        : {
+            title: '',
+            expenseDate: new Date(),
+            amount: 0,
+            category: 0,
+            paidBy: undefined,
+            paidFor: [],
+            splitMode: 'EVENLY',
+            saveDefaultSplittingOptions: false,
+            isReimbursement: false,
+            documents: [],
+            notes: '',
+          },
     resolver: zodResolver(expenseFormSchema),
   })
 
@@ -166,8 +178,7 @@ export function ExpenseForm({
                 <Checkbox
                   value={value}
                   onValueChange={onChange}
-                  color={BRAND_COLOR}
-                  style={{ width: 16, height: 16 }}
+                  className="bg-background-accent size-4"
                 />
                 <Pressable
                   onPress={() => onChange(!value)}
@@ -212,7 +223,7 @@ export function ExpenseForm({
               <ParticipantInput
                 value={
                   group.participants.find(
-                    (participant) => participant.id === value
+                    (participant) => participant.id === value,
                   ) ?? null
                 }
                 participants={group.participants}
@@ -285,13 +296,13 @@ export function ExpenseForm({
               <>
                 {group.participants.map((participant) => {
                   const paidForIndex = value.findIndex(
-                    (paidFor) => paidFor.participant === participant.id
+                    (paidFor) => paidFor.participant === participant.id,
                   )
                   const paidFor =
                     paidForIndex >= 0 ? value[paidForIndex] : undefined
                   const updatePaidFor = (
                     participantId: string,
-                    shares: number | null
+                    shares: number | null,
                   ) => {
                     onChange(
                       value.map((p) =>
@@ -299,11 +310,11 @@ export function ExpenseForm({
                           ? {
                               ...p,
                               shares: enforceCurrencyPattern(
-                                String((shares ?? 0) / 100)
+                                String((shares ?? 0) / 100),
                               ),
                             }
-                          : p
-                      )
+                          : p,
+                      ),
                     )
                   }
 
@@ -408,7 +419,7 @@ export function ExpenseForm({
           })}
           className={cn(
             bgBrand,
-            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
+            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
           )}
         >
           <Text className="text-white text-lg font-semibold">

@@ -202,7 +202,10 @@ function ExpenseList({
                   style={{ flexDirection: 'row', alignItems: 'stretch' }}
                 >
                   <View className="px-4 py-4 flex-row items-center">
-                    <FontAwesome6 name="ellipsis" />
+                    <FontAwesome6
+                      name="ellipsis"
+                      className="text-foreground-secondary"
+                    />
                   </View>
                 </MenuView>
               </View>

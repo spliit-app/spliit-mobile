@@ -3,6 +3,7 @@ import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { Category, GroupParticipant } from '@/utils/trpc'
 import { errorMessages } from '@/utils/validation'
 import { FontAwesome6 } from '@expo/vector-icons'
+import { cssInterop } from 'nativewind'
 import { PropsWithChildren, useState } from 'react'
 import {
   Text,
@@ -80,6 +81,7 @@ export function TextInput({
       verticalAlign="middle"
       className={cn(
         'bg-background px-2 py-2 rounded-lg border border-border text-md text-foreground',
+        'placeholder:text-foreground-secondary',
         hasError ? 'border-foreground-danger' : '',
         className,
       )}
@@ -243,7 +245,7 @@ export function CategoryInput({
     <>
       <Pressable
         className={cn(
-          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
+          'bg-background border border-border rounded-lg p-2 flex-row items-center active:opacity-60',
           hasError && 'border-red-500',
         )}
         onPress={() => {
@@ -252,11 +254,10 @@ export function CategoryInput({
       >
         <FontAwesome6
           name="money-bill"
-          color="gray"
           size={14}
-          className="ml-1 mr-2.5"
+          className="ml-1 mr-2.5 text-foreground-secondary"
         />
-        <Text className="text-lg flex-1">
+        <Text className="text-md text-foreground flex-1">
           {value?.name ?? 'Select a participant'}
         </Text>
       </Pressable>
@@ -296,7 +297,7 @@ export function ParticipantInput({
     <>
       <Pressable
         className={cn(
-          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
+          'bg-background border border-border rounded-lg p-2 flex-row items-center active:opacity-60',
           hasError && 'border-red-500',
         )}
         onPress={() => {
@@ -305,11 +306,10 @@ export function ParticipantInput({
       >
         <FontAwesome6
           name="user-large"
-          color="gray"
           size={14}
-          className="ml-1 mr-2.5"
+          className="ml-1 mr-2.5 text-foreground-secondary"
         />
-        <Text className="text-lg flex-1">
+        <Text className="text-md flex-1 text-foreground">
           {value?.name ?? 'Select a participant'}
         </Text>
       </Pressable>
@@ -348,7 +348,7 @@ export function DateInput({
     <>
       <Pressable
         className={cn(
-          'bg-white border border-gray-200 rounded-lg p-2 flex-row items-center active:opacity-60',
+          'bg-background border border-border rounded-lg p-2 flex-row items-center active:opacity-60',
           hasError && 'border-red-500',
         )}
         onPress={() => {
@@ -357,11 +357,10 @@ export function DateInput({
       >
         <FontAwesome6
           name="calendar"
-          color="gray"
           size={14}
-          className="ml-1 mr-2.5"
+          className="ml-1 mr-2.5 text-foreground-secondary"
         />
-        <Text className="text-lg flex-1">
+        <Text className="text-md flex-1 text-foreground">
           {value.toLocaleString('en-US', { dateStyle: 'medium' })}
         </Text>
       </Pressable>
@@ -401,9 +400,9 @@ function ParticipantInputModalContent({
     <View className="h-full relative justify-center p-2">
       <Pressable
         onPress={() => onCancel()}
-        className="absolute top-0 bottom-0 right-0 left-0 bg-gray-500 opacity-80"
+        className="absolute top-0 bottom-0 right-0 left-0 bg-background-overlay opacity-80"
       />
-      <View className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <View className="bg-background border border-border rounded-lg overflow-hidden">
         <View className="h-[400px]">
           <FlatList
             data={participants}
@@ -411,38 +410,44 @@ function ParticipantInputModalContent({
             renderItem={({ item, index }) => (
               <Pressable
                 className={cn(
-                  'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
+                  'py-3 border-border ml-4 pr-4 flex-row active:opacity-60',
                   index > 0 && 'border-t',
                 )}
                 onPress={() => setParticipant(item)}
               >
                 <Text
                   className={cn(
-                    'flex-1 items-center text-lg',
+                    'flex-1 items-center text-lg text-foreground',
                     participant?.id === item.id && 'font-semibold',
                   )}
                 >
                   {item.name}
                 </Text>
                 {participant?.id === item.id && (
-                  <FontAwesome6 name="check" size={16} className="mt-1" />
+                  <FontAwesome6
+                    name="check"
+                    size={16}
+                    className="mt-1 text-foreground-accent"
+                  />
                 )}
               </Pressable>
             )}
           />
         </View>
-        <View className="flex-row gap-4 justify-end border-t border-gray-200 p-2">
+        <View className="flex-row gap-4 justify-end border-t border-border p-2">
           <Pressable
             className="px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => onCancel()}
           >
-            <Text className="text-lg font-semibold">Close</Text>
+            <Text className="text-lg font-semibold text-foreground">Close</Text>
           </Pressable>
           <Pressable
-            className={cn(bgBrand, 'px-4 py-2 rounded-lg active:opacity-60')}
+            className="px-4 py-2 rounded-lg active:opacity-60 bg-background-accent"
             onPress={() => participant && onSubmit(participant)}
           >
-            <Text className="text-white text-lg font-semibold">Save</Text>
+            <Text className="text-foreground-on-accent text-lg font-semibold">
+              Save
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -479,9 +484,9 @@ function CategoryInputModalContent({
     <View className="h-full relative justify-center p-2">
       <Pressable
         onPress={() => onCancel()}
-        className="absolute top-0 bottom-0 right-0 left-0 bg-gray-500 opacity-80"
+        className="absolute top-0 bottom-0 right-0 left-0 bg-background-overlay opacity-80"
       />
-      <View className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <View className="bg-background border border-border rounded-lg overflow-hidden">
         <View className="h-[400px]">
           <SectionList
             sections={sections}
@@ -489,49 +494,75 @@ function CategoryInputModalContent({
             renderItem={({ item, index }) => (
               <Pressable
                 className={cn(
-                  'py-3 border-gray-200 ml-4 pr-4 flex-row active:opacity-60',
+                  'py-3 border-border ml-4 pr-4 flex-row active:opacity-60',
                   index > 0 && 'border-t',
                 )}
                 onPress={() => setCategory(item)}
               >
                 <Text
                   className={cn(
-                    'flex-1 items-center text-lg',
+                    'flex-1 items-center text-lg text-foreground',
                     category?.id === item.id && 'font-semibold',
                   )}
                 >
                   {item.name}
                 </Text>
                 {category?.id === item.id && (
-                  <FontAwesome6 name="check" size={16} className="mt-1" />
+                  <FontAwesome6
+                    name="check"
+                    size={16}
+                    className="mt-1 text-foreground-accent"
+                  />
                 )}
               </Pressable>
             )}
             renderSectionHeader={({ section }) => (
-              <View className="bg-slate-100 py-1 px-2 border-y border-gray-200">
-                <Text className="font-semibold">{section.title}</Text>
+              <View className="bg-background-card py-1 px-2 border-y border-border">
+                <Text className="text-foreground font-semibold">
+                  {section.title}
+                </Text>
               </View>
             )}
           />
         </View>
-        <View className="flex-row gap-4 justify-end border-t border-gray-200 p-2">
+        <View className="flex-row gap-4 justify-end border-t border-border p-4">
           <Pressable
             className="px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => onCancel()}
           >
-            <Text className="text-lg font-semibold">Close</Text>
+            <Text className="text-lg font-semibold text-foreground">Close</Text>
           </Pressable>
           <Pressable
-            className={cn(bgBrand, 'px-4 py-2 rounded-lg active:opacity-60')}
+            className="bg-background-accent px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => category && onSubmit(category)}
           >
-            <Text className="text-white text-lg font-semibold">Save</Text>
+            <Text className="text-foreground-on-accent text-lg font-semibold">
+              Save
+            </Text>
           </Pressable>
         </View>
       </View>
     </View>
   )
 }
+
+cssInterop(DateTimePicker, {
+  calendarTextClassName: 'calendarTextStyle',
+  headerTextClassName: 'headerTextStyle',
+  weekDaysTextClassName: 'weekDaysTextStyle',
+  headerButtonClassName: {
+    target: 'headerButtonStyle',
+    nativeStyleToProp: {
+      color: 'headerButtonColor',
+    },
+  },
+  selectedItemTextClassName: {
+    target: 'selectedTextStyle',
+    nativeStyleToProp: {
+      backgroundColor: 'selectedItemColor',
+    },
+  },
+})
 
 function DateInputModalContent({
   date: initialDate,
@@ -547,29 +578,38 @@ function DateInputModalContent({
     <View className="h-full relative justify-center px-2">
       <Pressable
         onPress={() => onCancel()}
-        className="absolute top-0 bottom-0 right-0 left-0 bg-gray-500 opacity-80"
+        className="absolute top-0 bottom-0 right-0 left-0 bg-background-overlay opacity-80"
       />
-      <View className="p-4 bg-white border border-gray-200 rounded-lg">
+      <View className="p-4 bg-background border border-border rounded-lg">
         <DateTimePicker
           mode="single"
           onChange={({ date }) => {
             if (date) setDate(new Date(date?.valueOf()))
           }}
           date={date}
-          selectedItemColor={BRAND_COLOR}
+          // @ts-expect-error class name
+          selectedItemTextClassName="bg-background-accent text-foreground-on-accent"
+          calendarTextClassName="text-foreground"
+          headerTextClassName="text-foreground"
+          weekDaysTextClassName="text-foreground"
+          headerButtonClassName="text-foreground"
         />
         <View className="flex-row gap-4 justify-end">
           <Pressable
             className="px-4 py-2 rounded-lg active:opacity-60"
             onPress={() => onCancel()}
           >
-            <Text className="text-lg font-semibold">Close</Text>
+            <Text className="text-lg font-semibold text-foreground">Close</Text>
           </Pressable>
           <Pressable
-            className={cn(bgBrand, 'px-4 py-2 rounded-lg active:opacity-60')}
+            className={cn(
+              'bg-background-accent px-4 py-2 rounded-lg active:opacity-60',
+            )}
             onPress={() => onSubmit(date)}
           >
-            <Text className="text-white text-lg font-semibold">Save</Text>
+            <Text className="text-foreground-on-accent text-lg font-semibold">
+              Save
+            </Text>
           </Pressable>
         </View>
       </View>

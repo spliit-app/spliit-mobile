@@ -21,6 +21,7 @@ module.exports = {
         border: { DEFAULT: 'var(--color-border)' },
         'background-positive': 'var(--color-background-positive)',
         'background-negative': 'var(--color-background-negative)',
+        'background-overlay': 'var(--color-background-overlay)',
         'border-positive': 'var(--color-border-positive)',
         'border-negative': 'var(--color-border-negative)',
       },
