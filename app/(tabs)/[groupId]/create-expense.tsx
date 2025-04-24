@@ -5,12 +5,14 @@ import {
   useLocalSearchParams,
   useRouter,
 } from 'expo-router'
-import { Button } from 'react-native'
+import { Button, Pressable, Text } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { BRAND_COLOR } from '@/utils/colors'
 import { ExpenseForm } from '@/components/expense-form'
 import { TrackScreen, useAnalytics } from '@/components/analytics'
+import colors from 'tailwindcss/colors'
+import { useColorScheme } from 'nativewind'
 
 export default function ExpenseScreen() {
   const router = useRouter()
@@ -26,23 +28,29 @@ export default function ExpenseScreen() {
   const utils = trpc.useUtils()
   const analytics = useAnalytics()
 
+  const { colorScheme } = useColorScheme()
+
   return (
     <>
       <TrackScreen screenName="group-create-expense" eventProps={{ groupId }} />
       <Stack.Screen
         options={{
           title: 'Add expense',
+          headerTintColor:
+            colorScheme === 'light' ? colors.black : colors.white,
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? colors.white : colors.black,
+          },
           headerRight: () => (
-            <Button
-              title="Cancel"
-              color={BRAND_COLOR}
-              onPress={() => router.back()}
-            />
+            <Pressable onPress={() => router.back()}>
+              <Text className="text-foreground-accent">Cancel</Text>
+            </Pressable>
           ),
         }}
       />
       <SafeAreaProvider>
-        <SafeAreaView edges={['top']} className="flex-1 bg-white">
+        <SafeAreaView edges={['top']} className="flex-1 bg-background">
           <KeyboardAwareScrollView bottomOffset={20}>
             {groupData?.group && (
               <ExpenseForm

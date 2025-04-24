@@ -26,11 +26,7 @@ export function SettingsForm({
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<Settings>({
-    defaultValues: settings
-      ? {
-          baseUrl: settings.baseUrl,
-        }
-      : DefaultSettings,
+    defaultValues: settings ? { baseUrl: settings.baseUrl } : DefaultSettings,
     resolver: zodResolver(settingsSchema),
   })
 
@@ -70,12 +66,9 @@ export function SettingsForm({
           onPress={handleSubmit(async (values) => {
             await onSave(values)
           })}
-          className={cn(
-            bgBrand,
-            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
-          )}
+          className="bg-background-accent flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60"
         >
-          <Text className="text-white text-lg font-semibold">
+          <Text className="text-foreground-on-accent text-lg font-semibold">
             {isSubmitting ? 'Saving…' : 'Save'}
           </Text>
         </Pressable>

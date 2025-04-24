@@ -330,14 +330,12 @@ export function ExpenseForm({
                     <View
                       key={participant.id}
                       className={
-                        'flex-row items-center border-gray-200 py-2 border-t h-16'
+                        'flex-row items-center border-border py-2 border-t h-16'
                       }
                     >
                       <Checkbox
                         value={paidFor !== undefined}
-                        color={BRAND_COLOR}
-                        style={{ width: 16, height: 16 }}
-                        className="mr-2"
+                        className="mr-2 bg-background-accent size-4"
                         onValueChange={(value) =>
                           value
                             ? addPaidFor(participant.id)
@@ -368,7 +366,9 @@ export function ExpenseForm({
                                 className="w-32"
                                 precision={0}
                               />
-                              <Text className="text-sm pt-1">shares</Text>
+                              <Text className="text-sm pt-1 text-foreground">
+                                shares
+                              </Text>
                             </View>
                           ))
                           .with('BY_PERCENTAGE', () => (
@@ -382,7 +382,9 @@ export function ExpenseForm({
                                 className="w-32"
                                 precision={0}
                               />
-                              <Text className="text-sm pt-1">%</Text>
+                              <Text className="text-sm pt-1 text-foreground">
+                                %
+                              </Text>
                             </View>
                           ))
                           .with('BY_AMOUNT', () => (

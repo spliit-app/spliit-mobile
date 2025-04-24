@@ -8,39 +8,47 @@ import { cn } from '@/utils/cn'
 import { TrackScreen } from '@/components/analytics'
 import { SettingsForm } from '@/components/settings-form'
 import { useSettings } from '@/utils/settings'
+import { useColorScheme } from 'nativewind'
+import colors from 'tailwindcss/colors'
 
 export default function AboutScreen() {
   const router = useRouter()
   const { settings, updateSettings } = useSettings()
+
+  const { colorScheme } = useColorScheme()
 
   return (
     <>
       <TrackScreen screenName="about" />
       <Stack.Screen
         options={{
+          headerTintColor:
+            colorScheme === 'light' ? colors.black : colors.white,
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? colors.white : colors.black,
+          },
           headerRight: () => (
-            <Button
-              title="Close"
-              color={BRAND_COLOR}
-              onPress={() => router.back()}
-            />
+            <Pressable onPress={() => router.back()}>
+              <Text className="text-foreground-accent">Close</Text>
+            </Pressable>
           ),
         }}
       />
       <SafeAreaProvider>
-        <SafeAreaView edges={['top']} className="flex-1 bg-white min-h-full">
+        <SafeAreaView
+          edges={['top']}
+          className="flex-1 bg-background min-h-full"
+        >
           <View className="p-4 min-h-full">
-            <Text className="text-lg">
+            <Text className="text-lg text-foreground">
               Spliit is an Open Source project created by{' '}
               <Text className="font-semibold">Sebastien Castiel</Text>, with
               help of many contributors on GitHub.
             </Text>
             <View className="flex-row mt-6 justify-center gap-4">
               <Pressable
-                className={cn(
-                  bgBrand,
-                  'py-2 px-3 rounded-lg flex-row items-center gap-3 active:opacity-60',
-                )}
+                className="py-2 px-3 rounded-lg flex-row items-center gap-3 active:opacity-60 bg-background-accent"
                 onPress={() =>
                   Linking.openURL('https://spliit.app/?ref=mobile-app')
                 }
@@ -48,9 +56,9 @@ export default function AboutScreen() {
                 <FontAwesome5
                   name="external-link-alt"
                   size={14}
-                  color="white"
+                  className="text-foreground-on-accent"
                 />
-                <Text className="text-white text-lg font-semibold">
+                <Text className="text-foreground-on-accent text-lg font-semibold">
                   Visit our website
                 </Text>
               </Pressable>

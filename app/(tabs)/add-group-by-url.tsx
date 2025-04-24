@@ -13,8 +13,10 @@ import { addRecentGroup } from '@/utils/recentGroups'
 import { useSettings } from '@/utils/settings'
 import { trpc } from '@/utils/trpc'
 import { Stack, useRouter } from 'expo-router'
+import { useColorScheme } from 'nativewind'
 import { useState } from 'react'
-import { Button, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import colors from 'tailwindcss/colors'
 
 export default function AddGroupByUrlModal() {
   const [url, setUrl] = useState('')
@@ -25,6 +27,7 @@ export default function AddGroupByUrlModal() {
   const {
     settings: { baseUrl },
   } = useSettings()
+  const { colorScheme } = useColorScheme()
 
   return (
     <>
@@ -32,16 +35,20 @@ export default function AddGroupByUrlModal() {
       <Stack.Screen
         options={{
           title: 'Add group by URL',
+          headerTintColor:
+            colorScheme === 'light' ? colors.black : colors.white,
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? colors.white : colors.black,
+          },
           headerRight: () => (
-            <Button
-              title="Cancel"
-              color={BRAND_COLOR}
-              onPress={() => router.back()}
-            />
+            <Pressable onPress={() => router.back()}>
+              <Text className="text-foreground-accent">Cancel</Text>
+            </Pressable>
           ),
         }}
       />
-      <View className="pt-4 bg-white h-full">
+      <View className="pt-4 bg-background h-full">
         <FormSection>
           <FormGroup>
             <Label>Group URL</Label>
@@ -86,12 +93,9 @@ export default function AddGroupByUrlModal() {
               }
               setIsPending(false)
             }}
-            className={cn(
-              bgBrand,
-              'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
-            )}
+            className="bg-background-accent flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60"
           >
-            <Text className="text-white text-lg font-semibold">
+            <Text className="text-foreground-on-accent text-lg font-semibold">
               {isPending ? 'Adding…' : 'Add'}
             </Text>
           </Pressable>
