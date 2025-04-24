@@ -44,6 +44,11 @@ export function SettingsForm({
                 onBlur={onBlur}
                 value={value}
                 hasError={!!errors.baseUrl}
+                keyboardType="url"
+                textContentType="URL"
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="off"
                 placeholder="e.g. https://spliit.app/"
               />
             )}
