@@ -1,6 +1,5 @@
 import { TrackScreen } from '@/components/analytics'
 import { cn } from '@/utils/cn'
-import { bgBrand, textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { updateRecentGroup } from '@/utils/recentGroups'
 import { Expense, trpc } from '@/utils/trpc'
@@ -83,21 +82,20 @@ function ExpenseList({
         {isInitialLoading ? (
           <View className="h-full flex-col justify-center items-center gap-4">
             <ActivityIndicator size="large" />
-            <Text className="text-slate-700">Loading group expensees</Text>
+            <Text className="text-foreground-secondary">Loading group expensees</Text>
           </View>
         ) : sections.length === 1 ? (
           <View className="h-full items-center justify-center">
-            <Text className="mb-2 font-bold text-lg text-slate-950">
+            <Text className="mb-2 font-bold text-lg text-foreground">
               Your group is ready!
             </Text>
-            <Text className="mb-4 text-lg text-slate-950">
+            <Text className="mb-4 text-lg text-foreground">
               You can now add expenses to it.
             </Text>
             <Pressable
-              className={cn(
-                bgBrand,
-                'flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
-              )}
+              className={
+                'bg-background-accent flex-row justify-center rounded-lg px-4 py-2 active:opacity-60'
+              }
               onPress={() =>
                 router.push({
                   pathname: '/(tabs)/[groupId]/create-expense',
@@ -105,7 +103,7 @@ function ExpenseList({
                 })
               }
             >
-              <Text className="text-white text-lg font-semibold">
+              <Text className="text-foreground-on-accent text-lg font-semibold">
                 Add expense
               </Text>
             </Pressable>

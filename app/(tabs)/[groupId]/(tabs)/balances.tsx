@@ -1,6 +1,5 @@
 import { TrackScreen } from '@/components/analytics'
 import { cn } from '@/utils/cn'
-import { textBrand } from '@/utils/colors'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { trpc } from '@/utils/trpc'
 import { router, useGlobalSearchParams } from 'expo-router'
@@ -11,7 +10,7 @@ import {
   Text,
   View,
 } from 'react-native'
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { AppRouterOutput } from 'spliit-api'
 
 export default function BalancesScreen() {
@@ -148,7 +147,7 @@ function Balances({
             </View>
 
             {data.reimbursements.length === 0 && (
-              <Text className="mx-4 text-sm">
+              <Text className="mx-4 text-sm text-foreground">
                 It looks like your group doesn’t need any reimbursement 😁
               </Text>
             )}

@@ -22,6 +22,7 @@ export default function TabLayout() {
               colorScheme === 'light' ? colors.white : colors.black,
             borderColor,
           },
+          sceneStyle: {backgroundColor: colorScheme === 'light' ? colors.white : colors.black}
         }}
       >
         <Tabs.Screen

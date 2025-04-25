@@ -1,9 +1,13 @@
+import { TrackScreen } from '@/components/analytics'
 import {
   RecentGroup,
   getRecentGroups,
   removeRecentGroup,
 } from '@/utils/recentGroups'
 import { trpc } from '@/utils/trpc'
+import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
+import { MenuView } from '@react-native-menu/menu'
+import { Image } from 'expo-image'
 import { Link, router, useNavigation, usePathname } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import {
@@ -12,17 +16,10 @@ import {
   Pressable,
   SectionList,
   Text,
-  View,
-  useColorScheme,
+  View
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { MenuView } from '@react-native-menu/menu'
 import { match } from 'ts-pattern'
-import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
-import { Image } from 'expo-image'
-import { BRAND_COLOR, bgBrand, textBrand } from '@/utils/colors'
-import { cn } from '@/utils/cn'
-import { TrackScreen } from '@/components/analytics'
 
 export default function GroupsScreen() {
   const [recentGroups, setRecentGroups] = useState<RecentGroup[] | null>(null)
@@ -61,7 +58,7 @@ export default function GroupsScreen() {
         {recentGroups === null ? (
           <View className="h-full flex-col justify-center items-center gap-4">
             <ActivityIndicator size="large" />
-            <Text className="text-slate-700">Loading recent groups</Text>
+            <Text className="text-foreground-secondary">Loading recent groups</Text>
           </View>
         ) : recentGroups.length === 0 ? (
           <View className="h-full flex-col items-center justify-center">
@@ -71,29 +68,28 @@ export default function GroupsScreen() {
               contentPosition="top center"
               style={{ height: 64, width: '100%' }}
             />
-            <Text className="text-xl font-semibold mt-8">
+            <Text className="text-foreground text-xl font-semibold mt-8">
               Welcome to Spliit!
             </Text>
-            <Text className="text-lg">
+            <Text className="text-lg text-foreground">
               You are now ready to create your first group.
             </Text>
             <Pressable
-              className={cn(
-                bgBrand,
-                'flex-row justify-center rounded-lg px-4 py-2 mt-4 active:opacity-60',
-              )}
+              className={
+                'bg-background-accent flex-row justify-center rounded-lg px-4 py-2 mt-4 active:opacity-60'
+              }
               onPress={() =>
                 router.push({
                   pathname: '/(tabs)/create-group',
                 })
               }
             >
-              <Text className="text-white text-lg font-semibold">
+              <Text className="text-foreground-on-accent text-lg font-semibold">
                 Create group
               </Text>
             </Pressable>
 
-            <Text className="text-lg mt-12">
+            <Text className="text-lg mt-12 text-foreground">
               Do you want to add an existing group here?
             </Text>
             <Pressable
@@ -104,7 +100,7 @@ export default function GroupsScreen() {
                 })
               }
             >
-              <Text className={cn(textBrand, 'text-lg font-semibold')}>
+              <Text className={'text-foreground-accent text-lg font-semibold'}>
                 Add group by URL
               </Text>
             </Pressable>
