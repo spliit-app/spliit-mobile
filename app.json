@@ -20,12 +20,10 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "ios": {
-        "icon": {
-          "dark": "./assets/images/icon-dark.png",
-          "light": "./assets/images/icon.png",
-          "tinted": "./assets/images/icon-tinted.png"
-        }
+      "icon": {
+        "dark": "./assets/images/icon-dark.png",
+        "light": "./assets/images/icon.png",
+        "tinted": "./assets/images/icon-tinted.png"
       }
     },
     "plugins": [
@@ -35,9 +33,9 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
-          "image": "./assets/images/splash-light@3x.png",
+          "image": "./assets/images/icon.png",
           "dark": {
-            "image": "./assets/images/splash-dark@3x.png",
+            "image": "./assets/images/icon-dark.png",
             "backgroundColor": "#000000"
           },
           "imageWidth": 200
