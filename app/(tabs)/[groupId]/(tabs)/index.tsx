@@ -49,7 +49,7 @@ function ExpenseList({
   group: NonNullable<AppRouterOutput['groups']['get']['group']>
 }) {
   const router = useRouter()
-  const { data, fetchNextPage, refetch, isInitialLoading } =
+  const { data, fetchNextPage, isInitialLoading } =
     trpc.groups.expenses.list.useInfiniteQuery(
       { groupId: group.id, limit: PAGE_SIZE },
       { getNextPageParam: ({ nextCursor }) => nextCursor },
@@ -82,7 +82,9 @@ function ExpenseList({
         {isInitialLoading ? (
           <View className="h-full flex-col justify-center items-center gap-4">
             <ActivityIndicator size="large" />
-            <Text className="text-foreground-secondary">Loading group expensees</Text>
+            <Text className="text-foreground-secondary">
+              Loading group expensees
+            </Text>
           </View>
         ) : sections.length === 1 ? (
           <View className="h-full items-center justify-center">
