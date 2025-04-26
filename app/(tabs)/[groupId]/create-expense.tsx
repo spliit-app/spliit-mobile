@@ -1,3 +1,5 @@
+import { TrackScreen, useAnalytics } from '@/components/analytics'
+import { ExpenseForm } from '@/components/expense-form'
 import { trpc } from '@/utils/trpc'
 import {
   Stack,
@@ -5,14 +7,11 @@ import {
   useLocalSearchParams,
   useRouter,
 } from 'expo-router'
-import { Button, Pressable, Text } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import { BRAND_COLOR } from '@/utils/colors'
-import { ExpenseForm } from '@/components/expense-form'
-import { TrackScreen, useAnalytics } from '@/components/analytics'
-import colors from 'tailwindcss/colors'
 import { useColorScheme } from 'nativewind'
+import { Pressable, Text } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import colors from 'tailwindcss/colors'
 
 export default function ExpenseScreen() {
   const router = useRouter()

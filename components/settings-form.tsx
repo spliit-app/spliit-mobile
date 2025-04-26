@@ -7,12 +7,10 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
+import { DefaultSettings, Settings, settingsSchema } from '@/utils/settings'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { Pressable, Text, View } from 'react-native'
-import { cn } from '@/utils/cn'
-import { Settings, settingsSchema, DefaultSettings } from '@/utils/settings'
-import { bgBrand } from '@/utils/colors'
 
 export function SettingsForm({
   settings,

@@ -1,9 +1,3 @@
-import { Text, View, Pressable, Alert } from 'react-native'
-import { useForm, Controller, useFieldArray } from 'react-hook-form'
-import { useRouter } from 'expo-router'
-import { GroupDetails, trpc } from '@/utils/trpc'
-import { GroupFormValues, groupFormSchema } from 'spliit-api/src/lib/schemas'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   ErrorMessage,
   FormGroup,
@@ -13,9 +7,13 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
-import { FontAwesome, FontAwesome6 } from '@expo/vector-icons'
-import { BRAND_COLOR, bgBrand, textBrand } from '@/utils/colors'
 import { cn } from '@/utils/cn'
+import { GroupDetails } from '@/utils/trpc'
+import { FontAwesome } from '@expo/vector-icons'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { Alert, Pressable, Text, View } from 'react-native'
+import { GroupFormValues, groupFormSchema } from 'spliit-api/src/lib/schemas'
 
 export function GroupForm({
   groupDetails,

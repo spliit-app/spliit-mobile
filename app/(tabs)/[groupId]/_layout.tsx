@@ -1,4 +1,3 @@
-import { BRAND_COLOR } from '@/utils/colors'
 import { useSettings } from '@/utils/settings'
 import { trpc } from '@/utils/trpc'
 import { FontAwesome6 } from '@expo/vector-icons'

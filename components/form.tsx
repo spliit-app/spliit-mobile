@@ -1,20 +1,19 @@
 import { cn } from '@/utils/cn'
-import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { Category, GroupParticipant } from '@/utils/trpc'
 import { errorMessages } from '@/utils/validation'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { cssInterop } from 'nativewind'
 import { PropsWithChildren, useState } from 'react'
 import {
-  Text,
   TextInput as BaseTextInput,
-  TextInputProps,
-  View,
-  Pressable,
-  Modal,
-  SectionList,
   FlatList,
+  Modal,
+  Pressable,
+  SectionList,
+  Text,
+  TextInputProps,
   TextProps,
+  View,
   ViewProps,
 } from 'react-native'
 import DateTimePicker from 'react-native-ui-datepicker'

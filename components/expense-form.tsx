@@ -13,18 +13,16 @@ import {
 } from '@/components/form'
 import { Expense, ExpenseDetails, Group, trpc } from '@/utils/trpc'
 import { zodResolver } from '@hookform/resolvers/zod'
+import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import Checkbox from 'expo-checkbox'
+import { cssInterop } from 'nativewind'
 import { Controller, useForm } from 'react-hook-form'
 import { Pressable, Text, View } from 'react-native'
 import {
   ExpenseFormValues,
   expenseFormSchema,
 } from 'spliit-api/src/lib/schemas'
-import Checkbox from 'expo-checkbox'
-import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { match } from 'ts-pattern'
-import { BRAND_COLOR, bgBrand } from '@/utils/colors'
-import { cn } from '@/utils/cn'
-import { cssInterop } from 'nativewind'
 
 cssInterop(Checkbox, {
   className: {
@@ -419,12 +417,9 @@ export function ExpenseForm({
           onPress={handleSubmit(async (values) => {
             await onSave(values)
           })}
-          className={cn(
-            bgBrand,
-            'flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60',
-          )}
+          className="bg-background-accent flex-1 flex-row justify-center rounded-lg px-4 py-2 active:opacity-60"
         >
-          <Text className="text-white text-lg font-semibold">
+          <Text className="text-foreground-on-accent text-lg font-semibold">
             {isSubmitting ? 'Saving…' : 'Save'}
           </Text>
         </Pressable>

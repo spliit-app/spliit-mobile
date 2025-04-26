@@ -1,12 +1,11 @@
-import { ScrollView, Button, Pressable, Text } from 'react-native'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
-import { trpc } from '@/utils/trpc'
-import { BRAND_COLOR } from '@/utils/colors'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import { GroupForm } from '@/components/group-form'
 import { TrackScreen } from '@/components/analytics'
+import { GroupForm } from '@/components/group-form'
+import { trpc } from '@/utils/trpc'
+import { Stack, useGlobalSearchParams, useRouter } from 'expo-router'
 import { useColorScheme } from 'nativewind'
+import { Pressable, Text } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import colors from 'tailwindcss/colors'
 
 export default function GroupSettingsScreen() {

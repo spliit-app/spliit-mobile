@@ -7,8 +7,6 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
-import { cn } from '@/utils/cn'
-import { BRAND_COLOR, bgBrand } from '@/utils/colors'
 import { addRecentGroup } from '@/utils/recentGroups'
 import { useSettings } from '@/utils/settings'
 import { trpc } from '@/utils/trpc'
