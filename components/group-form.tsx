@@ -1,7 +1,6 @@
 import { Text, View, Pressable, Alert } from 'react-native'
 import { useForm, Controller, useFieldArray } from 'react-hook-form'
-import { useRouter } from 'expo-router'
-import { GroupDetails, trpc } from '@/utils/trpc'
+import { GroupDetails } from '@/utils/trpc'
 import { GroupFormValues, groupFormSchema } from 'spliit-api/src/lib/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -13,9 +12,10 @@ import {
   Label,
   TextInput,
 } from '@/components/form'
-import { FontAwesome, FontAwesome6 } from '@expo/vector-icons'
-import { BRAND_COLOR, bgBrand, textBrand } from '@/utils/colors'
+import { FontAwesome } from '@expo/vector-icons'
+import { bgBrand, textBrand } from '@/utils/colors'
 import { cn } from '@/utils/cn'
+import colors from "tailwindcss/colors";
 
 export function GroupForm({
   groupDetails,
@@ -65,6 +65,7 @@ export function GroupForm({
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 placeholder="Group name"
+                placeholderTextColor={colors.gray[400]}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -84,6 +85,7 @@ export function GroupForm({
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 placeholder="$"
+                placeholderTextColor={colors.gray[400]}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -107,6 +109,7 @@ export function GroupForm({
                 multiline
                 numberOfLines={3}
                 placeholder="What information is relevant to group participants?"
+                placeholderTextColor={colors.gray[400]}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value ?? ''}
